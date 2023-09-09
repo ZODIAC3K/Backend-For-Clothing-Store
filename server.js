@@ -1,27 +1,49 @@
-// npm i express esm nodemon -D dotenv
-import express from 'express';
-import mongoose from 'mongoose';
-import {APP_PORT, DB_URL} from './config' 
-import path from 'path'
-import errorHandler from './middlewares/errorHandler';
-// import routes from './routes'
+const express = require('express');
+const mongoose = require('mongoose');
+const {
+  APP_PORT,
+  DEBUG_MODE,
+  DB_URL,
+  JWT_SECRET,
+  APP_URL,
+} = require('./config');
+const path = require('path');
+const errorHandler = require('./middlewares/errorHandler');
+
 const app = express();
-
-//Database
-mongoose.connect(DB_URL, {useNewUrlParser: true, useUnifiedTopology: true});
+// Database Connection
+mongoose.set("strictQuery", true); // Telling mongo to follow schemas strictly. for mongo V7+
+mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
-db.on('error', console.error.bind(console,'connection error: '));
-db.once('open',()=>{
-    console.log('DB connected...');
-})
-
-// global.appRoot = path.resolve(__dirname);
-app.use(express.urlencoded({extended:false}));
-app.use(express.json())
-// app.use('/api',routes)
-// app.use('/uploads', express.static('uploads'))
-
+db.on('error', console.error.bind(console, 'connection error: '));
+db.once('open', () => {
+  console.log('Database Connected...');
+});
+app.use(express.urlencoded({ extended: true })); // leave it true because we are dealing with nested json object not the flat json sometime.
+app.use(express.json());
 app.use(errorHandler);
-app.listen(APP_PORT, ()=>{
-    console.log(`Listning on port ${APP_PORT}`);
-})
+
+// Routes....
+
+
+
+
+
+
+
+
+
+
+// Display Listening Port
+app.listen(APP_PORT, () => {
+  console.log(`Listening on port ${APP_PORT}`);
+});
+
+// Gracefully handle application shutdown
+process.on('SIGINT', () => {
+  console.log('----------------- Interruption Detected On Server!!! ---------------------------------- Closing Database Connection... -----------------'); // server operations intrupted so close the db connection manually.
+  db.close(() => {
+    console.log('Database Connection Closed. Exiting...');
+    process.exit(0);
+  });
+});

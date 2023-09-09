@@ -1,4 +1,3 @@
-
 const ProductDetails = require('./ProductDetailsSchema');
 const BrandDetails = require('./BrandDetailsSchema');
 const CategoryDetails = require('./CategoryDetailsSchema');

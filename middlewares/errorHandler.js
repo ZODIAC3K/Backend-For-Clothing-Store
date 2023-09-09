@@ -1,20 +1,21 @@
-import { DEBUG_MODE } from "../config";
-import CustomErrorHandler from "../services/CustomErrorHandler";
-const errorHandler = (err, req, res, next) =>{
-    let statusCode =500;
-    let data = {
-        message: 'Internal server error',
-        ...(DEBUG_MODE === 'true' && {originalError: err.message})
-    }
+const { DEBUG_MODE } = require('../config');
+const CustomErrorHandler = require('../services/CustomErrorHandler');
 
-    if(err instanceof CustomErrorHandler){
-        statusCode = err.status;
-        data = {
-            message: err.message
-        }
-    }
+const errorHandler = (err, req, res, next) => {
+  let statusCode = 500;
+  let data = {
+    message: 'Internal server error',
+    ...(DEBUG_MODE === 'true' && { originalError: err.message }),
+  };
 
-    return res.status(statusCode).json(data);
-}
+  if (err instanceof CustomErrorHandler) {
+    statusCode = err.status;
+    data = {
+      message: err.message,
+    };
+  }
 
-export default errorHandler;
+  return res.status(statusCode).json(data);
+};
+
+module.exports = errorHandler;
