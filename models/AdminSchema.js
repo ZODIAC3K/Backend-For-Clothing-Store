@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
 
 const adminSchema = new mongoose.Schema({
-  admin_id: { type: String, required: true },
   email: { type: String, required: true },
-  pass: { type: String, required: true },
-  status: { type: Boolean, required: true },
-  fname: { type: String, required: true },
-  lname: { type: String, required: true },
-  mobile: { type: Number, required: true },
-  email_verification: { type: Boolean, required: true },
-  profile_picture: { type: String, required: true },
-  Encountered: { type: [String], required: true },
+  pass: { type: Date, required: true }, // Store hashed password
+  fname: String,
+  lname: String,
+  mobile: Number,
+  profile_picture: { type: mongoose.Schema.Types.ObjectId, ref: 'ImageDetail' },
+  created_at: { type: Date, default: Date.now() },
+  modified_at: { type: Date, default: Date.now() },
 });
 
 const Admin = mongoose.model('Admin', adminSchema);

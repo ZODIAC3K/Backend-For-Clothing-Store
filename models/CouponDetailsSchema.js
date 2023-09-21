@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 
-const couponDetailsSchema = new mongoose.Schema({
-  coupon_id: { type: String, required: true },
-  discount: { type: Number, required: true },
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  created_at: { type: Date, required: true },
+const couponSchema = new mongoose.Schema({
+  discount: Number,
+  title: String,
+  description: String,
+  created_at: { type: Date, default: Date.now() },
   end_at: { type: Date, required: true },
-  modified_at: { type: Date, required: true },
+  modified_at: { type: Date, default: Date.now() },
 });
 
-const CouponDetails = mongoose.model('CouponDetails', couponDetailsSchema);
+
+const CouponDetails = mongoose.model('Coupon', couponSchema);
 
 module.exports = CouponDetails;

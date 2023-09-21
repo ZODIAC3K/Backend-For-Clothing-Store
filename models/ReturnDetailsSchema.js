@@ -1,22 +1,12 @@
 const mongoose = require('mongoose');
 
-const returnDetailsSchema = new mongoose.Schema({
-  return_details_id: { type: String, required: true },
-  order_details_id: { type: String, required: true },
-  user_details_id: { type: String, required: true },
-  req_type: { type: String, required: true },
-  status: { type: String, required: true },
-  product_ordered: { type: [String], required: true },
-  color: { type: [String], required: true },
-  size_ordered: { type: [String], required: true },
-  quantity_ordered: { type: [Number], required: true },
-  coupon_used: { type: [String], required: true },
-  offer_used: { type: String, required: true },
-  total_amount: { type: Number, required: true },
-  created_at: { type: Date, required: true },
-  modified_at: { type: Date, required: true },
+const returnSchema = new mongoose.Schema({
+  order_details_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
+  req_type: String,
+  status: String,
+  created_at: { type: Date, default: Date.now() },
+  modified_at: { type: Date, default: Date.now() },
 });
-
-const ReturnDetails = mongoose.model('ReturnDetails', returnDetailsSchema);
+const ReturnDetails = mongoose.model('Return', returnSchema);
 
 module.exports = ReturnDetails;

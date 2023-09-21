@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
-const imageDetailsSchema = new mongoose.Schema({
-  image_details_id: { type: String, required: true },
-  data: { type: String, required: true }, // Store as base64-encoded data
-  content_type: { type: String, required: true },
+const imageDetailSchema = new mongoose.Schema({
+  data: { type: Buffer, required: true },
+  content_type: { type: Buffer, required: true },
 });
 
-const ImageDetails = mongoose.model('ImageDetails', imageDetailsSchema);
+const ImageDetails = mongoose.model('ImageDetail', imageDetailSchema);
 
 module.exports = ImageDetails;

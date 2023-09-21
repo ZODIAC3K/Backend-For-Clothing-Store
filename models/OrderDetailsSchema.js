@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
 
-const orderDetailsSchema = new mongoose.Schema({
-  order_details_id: { type: String, required: true },
-  user_details_id: { type: String, required: true },
-  req_type: { type: String, required: true },
-  status: { type: String, required: true },
-  product_ordered: { type: [String], required: true },
-  color: { type: [String], required: true },
-  size_ordered: { type: [String], required: true },
-  quantity_ordered: { type: [Number], required: true },
-  coupon_used: { type: [String], required: true },
-  offer_used: { type: String, required: true },
-  total_amount: { type: Number, required: true },
-  created_at: { type: Date, required: true },
-  modified_at: { type: Date, required: true },
+const orderSchema = new mongoose.Schema({
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  req_type: String,
+  status: String,
+  product_ordered: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+  color: [String],
+  size_ordered: [String],
+  quantity_ordered: [Number],
+  coupon_used: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Coupon' }],
+  offer_used: { type: mongoose.Schema.Types.ObjectId, ref: 'Offer' },
+  total_amount: Number,
+  created_at: { type: Date, default: Date.now() },
+  modified_at: { type: Date, default: Date.now() },
 });
 
-const OrderDetails = mongoose.model('OrderDetails', orderDetailsSchema);
+const OrderDetails = mongoose.model('Order', orderSchema);
 
 module.exports = OrderDetails;

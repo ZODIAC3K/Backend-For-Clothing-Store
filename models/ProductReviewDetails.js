@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
 
-const productReviewDetailsSchema = new mongoose.Schema({
-  product_review_id: { type: String, required: true },
-  user_id: { type: String, required: true },
-  message: { type: String, required: true },
+const productReviewSchema = new mongoose.Schema({
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  message: String,
   rating: { type: Number, required: true },
-  image_details_id: { type: [String], required: true },
+  image_details_id: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ImageDetail' }],
 });
 
-const ProductReviewDetails = mongoose.model('ProductReviewDetails', productReviewDetailsSchema);
+const ProductReviewDetails = mongoose.model('ProductReview', productReviewSchema);
 
 module.exports = ProductReviewDetails;

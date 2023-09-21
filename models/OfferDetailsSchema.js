@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 
-const offerDetailsSchema = new mongoose.Schema({
-  offer_id: { type: String, required: true },
-  offer_discount: { type: Number, required: true },
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  created_at: { type: Date, required: true },
-  end_at: { type: Date, required: true },
-  modified_at: { type: Date, required: true },
+const offerSchema = new mongoose.Schema({
+  offer_discount: Number,
+  title: String,
+  description: String,
+  created_at: { type: Date, default: Date.now() },
+  end_at: { type: Date, required: true},
+  modified_at: { type: Date, default: Date.now() },
 });
 
-const OfferDetails = mongoose.model('OfferDetails', offerDetailsSchema);
+const OfferDetails = mongoose.model('Offer', offerSchema);
 
 module.exports = OfferDetails;
