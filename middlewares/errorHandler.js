@@ -2,6 +2,7 @@ const { DEBUG_MODE } = require('../config');
 const CustomErrorHandler = require('../services/CustomErrorHandler');
 
 const errorHandler = (err, req, res, next) => {
+
   let statusCode = 500;
   let data = {
     message: 'Internal server error',
@@ -15,7 +16,7 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
-  return res.status(statusCode).json(data);
+  res.status(statusCode).json(data);
 };
 
 module.exports = errorHandler;

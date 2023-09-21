@@ -6,5 +6,6 @@ module.exports = {
   DEBUG_MODE: process.env.DEBUG_MODE === 'true',
   DB_URL: process.env.DB_URL,
   JWT_SECRET: process.env.JWT_SECRET,
-  APP_URL: process.env.APP_URL,
+  API_KEY: process.env.API_KEY,
+  SALT: process.env.SALT
 };

@@ -9,6 +9,8 @@ const {
 } = require('./config');
 const path = require('path');
 const errorHandler = require('./middlewares/errorHandler');
+const apiAuth = require('./middlewares/apiAuth');
+const authRouter = require('./routes/auth')
 
 const app = express();
 // Database Connection
@@ -21,18 +23,18 @@ db.once('open', () => {
 });
 app.use(express.urlencoded({ extended: true })); // leave it true because we are dealing with nested json object not the flat json sometime.
 app.use(express.json());
-app.use(errorHandler);
+app.use(apiAuth);
 
 // Routes....
 
+app.use('/api/v1/auth', authRouter);
 
 
 
 
 
 
-
-
+app.use(errorHandler);
 
 // Display Listening Port
 app.listen(APP_PORT, () => {

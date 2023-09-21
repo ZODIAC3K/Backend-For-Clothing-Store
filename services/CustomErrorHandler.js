@@ -15,7 +15,7 @@ class CustomErrorHandler extends Error {
       return new CustomErrorHandler(status, message);
     }
   
-    static unAuthorized(message = 'unAuthorized') {
+    static unAuthorized(message = 'Unauthorized') {
       let status = 401;
       return new CustomErrorHandler(status, message);
     }
@@ -27,6 +27,11 @@ class CustomErrorHandler extends Error {
   
     static serverError(message = 'Internal server Error') {
       let status = 500;
+      return new CustomErrorHandler(status, message);
+    }
+
+    static badRequest(message = "Bad Request"){
+      let status = 400;
       return new CustomErrorHandler(status, message);
     }
   }
