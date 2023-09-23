@@ -1,6 +1,5 @@
 const {
 	Product,
-	ProductVarient,
 	StockDetail,
 } = require("./ProductDetailsSchema");
 const BrandDetails = require("./BrandDetailsSchema");
@@ -18,7 +17,6 @@ const User = require("./UserDetailSchema");
 
 module.exports = {
 	Product,
-	ProductVarient,
 	StockDetail,
 	BrandDetails,
 	CategoryDetails,

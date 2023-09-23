@@ -10,7 +10,7 @@ class CustomErrorHandler extends Error {
       return new CustomErrorHandler(status, message);
     }
   
-    static wrongCredentials(message = 'Username or password is wrong!') {
+    static wrongCredentials(message = 'Email or password is wrong!') {
       let status = 401;
       return new CustomErrorHandler(status, message);
     }
