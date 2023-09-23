@@ -20,13 +20,13 @@ Requests need to be authenticated such that any third party cannot request resou
     Added an API key system where every request should contain a token encrypted using the API key which will be decrypted to check if it's valid or not
         
         {
-            ...
-
             Headers: {
-                x-api-key: // API Key....
-            }
+                ...
 
-            ...
+                x-api-key: // API Key....
+            
+                ...
+            }
         }
 
     ### Error
@@ -69,7 +69,7 @@ Requests need to be authenticated such that any third party cannot request resou
 
     - **Authentication:**
         Now we check if user is present in our database, if yes we set and cookie <code>auth-token</code> as jwt token (uid as payload, default expiry - 2h). Else throw an error.
-        
+
     - **Error:**
         ```
             {

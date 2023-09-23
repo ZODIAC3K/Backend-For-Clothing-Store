@@ -8,7 +8,7 @@ const { default: JwtService } = require("../services/JwtService");
 // Register user ( only email and password )
 async function registerUser(req, res, next) {
 	try {
-		const { email, password } = req.body;
+		const { email, password, fname, lname, mobile } = req.body;
 
 		const userRec = await User.findOne({
 			email: email,
@@ -29,6 +29,9 @@ async function registerUser(req, res, next) {
 		const userData = {
 			email: email,
 			pass: CryptoJS.AES.encrypt(password, SALT),
+			fname: fname,
+			lname: lname,
+			mobile: mobile
 		};
 
 		const user = new User(userData);
