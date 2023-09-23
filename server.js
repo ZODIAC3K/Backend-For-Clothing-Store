@@ -10,9 +10,27 @@ const {
 const path = require('path');
 const errorHandler = require('./middlewares/errorHandler');
 const apiAuth = require('./middlewares/apiAuth');
-const authRouter = require('./routes/auth')
-
+const authRouter = require('./routes/auth');
 const app = express();
+const cors = require("cors");
+
+app.use(cors()); // allows api call from all origin. {remove it in deployment}
+// {uncomment below 3 lines in deployment}
+// app.use(cors({
+//   origin: "localhost:3000" // change it to required URL on deployment.
+// }));
+
+
+
+
+
+
+
+
+
+
+
+
 // Database Connection
 mongoose.set("strictQuery", true); // Telling mongo to follow schemas strictly. for mongo V7+
 mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
