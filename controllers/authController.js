@@ -1,7 +1,6 @@
 const { SALT, API_KEY } = require("../config");
 const { User } = require("../models");
 const { JwtService, CustomErrorHandler } = require("../services");
-const uuid = require("uuid");
 const CryptoJS = require("crypto-js");
 
 // Register user ( only email and password )
@@ -30,7 +29,7 @@ async function registerUser(req, res, next) {
 			pass: CryptoJS.AES.encrypt(password, SALT),
 			fname: fname,
 			lname: lname,
-			mobile: mobile
+			mobile: mobile,
 		};
 
 		const user = new User(userData);
@@ -73,7 +72,10 @@ async function loginUser(req, res, next) {
 				return;
 			}
 
-			const encryptedPass = CryptoJS.AES.encrypt(password, SALT).toString();
+			const encryptedPass = CryptoJS.AES.encrypt(
+				password,
+				SALT
+			).toString();
 
 			if (!user.password === encryptedPass) {
 				next(CustomErrorHandler.wrongCredentials());

@@ -129,3 +129,8 @@ Requests need to be authenticated such that any third party cannot request resou
 - ### Email Verification
 
 - ### Forgot Password
+
+- ### Image Controller
+    Made two controllers to handle image uploads: <code>insertImage</code> and <code>insertMultipleImages</code>. These are to be used inside routes where image uploading is needed. It reads the uploaded image and uploads it to the database while returning the id to reference it in the required places.
+
+    Make sure to use **ERROR HANDLING** when using this controller as it **directly throws error** without passing it to the next middleware.
