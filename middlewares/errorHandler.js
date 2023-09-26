@@ -6,7 +6,7 @@ const errorHandler = (err, req, res, next) => {
   let statusCode = 500;
   let data = {
     message: 'Internal server error',
-    ...(DEBUG_MODE === 'true' && { originalError: err.message }),
+    ...(DEBUG_MODE  && { originalError: err.message }),
   };
 
   if (err instanceof CustomErrorHandler) {
@@ -15,6 +15,9 @@ const errorHandler = (err, req, res, next) => {
       message: err.message,
     };
   }
+
+  if ( statusCode === 500 && DEBUG_MODE )
+    console.error(err); 
 
   res.status(statusCode).json(data);
 };

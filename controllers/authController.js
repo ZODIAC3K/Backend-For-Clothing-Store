@@ -1,46 +1,104 @@
-const { SALT, API_KEY } = require('../config');
-const { User } = require('../models');
-const CustomErrorHandler = require('../services/CustomErrorHandler');
-const uuid = require('uuid');
-const CryptoJS = require('crypto-js');
+const { SALT, API_KEY } = require("../config");
+const { User } = require("../models");
+const CustomErrorHandler = require("../services/CustomErrorHandler");
+const uuid = require("uuid");
+const CryptoJS = require("crypto-js");
+const { default: JwtService } = require("../services/JwtService");
 
 // Register user ( only email and password )
 async function registerUser(req, res, next) {
-    const { email, password } = req.body;
+	try {
+		const { email, password, fname, lname, mobile } = req.body;
 
-    const userRec = await User.findOne({
-        email: email
-    })
+		const userRec = await User.findOne({
+			email: email,
+		}).catch((error) => {
+			next(error);
+			return;
+		});
 
-    if(userRec){
-        next(CustomErrorHandler.alreadyExist("Already Exists: User already exists!"));
-        return;
-    }
+		if (userRec) {
+			next(
+				CustomErrorHandler.alreadyExist(
+					"Already Exists: User already exists!"
+				)
+			);
+			return;
+		}
 
-    const user_id = "UID_" + uuid.v4();
+		const userData = {
+			email: email,
+			pass: CryptoJS.AES.encrypt(password, SALT),
+			fname: fname,
+			lname: lname,
+			mobile: mobile
+		};
 
-    const userData = {
-        user_id: user_id,
-        email: email,
-        pass: CryptoJS.AES.encrypt(password, SALT)
-    }
+		const user = new User(userData);
+		user.save()
+			.then((user) => {
+				const encryptedUserId = JwtService.sign({
+					id: user._id,
+				});
 
-    const user = new User(userData);
-    user.save()
-    .then(()=> {
-        const encryptedUserId = CryptoJS.AES.encrypt(user_id, API_KEY).toString();
-        res.cookie('auth-token', encryptedUserId, { httpOnly: true });
+				res.cookie("auth-token", encryptedUserId, {
+					httpOnly: true,
+					maxAge: 7200000,
+				});
 
-        return res.status(200).json({ message: "Successfully Registered!", redirectTo: "/" });
-    });
+				return res.status(200).json({
+					message: "Successfully Registered!",
+					redirectTo: "/",
+				});
+			})
+			.catch((err) => {
+				next(err);
+				return;
+			});
+	} catch (err) {
+		next(err);
+	}
 }
 
 // Log user in based on credentials ( email, password )
 
+async function loginUser(req, res, next) {
+	try {
+		const { email, password } = req.body;
 
+		User.findOne({
+			email: email,
+		}).then((user) => {
+			if (!user) {
+				next(CustomErrorHandler.notFound());
+				return;
+			}
 
-// Log user out by deleting cookie on the frontend
+			const encryptedPass = CryptoJS.AES.encrypt(password, SALT).toString();
 
-module.exports = {
-    registerUser
+			if (!user.password === encryptedPass) {
+				next(CustomErrorHandler.wrongCredentials());
+				return;
+			}
+
+			const encryptedUserId = JwtService.sign({ id: user._id });
+			res.cookie("auth-token", encryptedUserId, {
+				httpOnly: true,
+				maxAge: 7200000,
+			});
+
+			return res
+				.status(200)
+				.json({ message: "Logged in sucessfully!", redirectTo: "/" });
+		});
+	} catch (err) {
+		next(err);
+	}
 }
+
+const authController = {
+	register: registerUser,
+	login: loginUser,
+};
+
+module.exports = authController;

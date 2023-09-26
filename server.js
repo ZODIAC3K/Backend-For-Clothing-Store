@@ -8,9 +8,8 @@ const {
   APP_URL,
 } = require('./config');
 const path = require('path');
-const errorHandler = require('./middlewares/errorHandler');
-const apiAuth = require('./middlewares/apiAuth');
-const authRouter = require('./routes/auth');
+const { apiAuth, errorHandler } = require("./middlewares");
+const { authRouter } = require('./routes');
 const app = express();
 const cors = require("cors");
 

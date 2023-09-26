@@ -1,8 +1,16 @@
 # Backend-For-Clothing-Store
 
-## Current Job
+## Run Server
+Use the prewritten scripts **'start'** or **'dev'** to run the server.
 
-- Add crypto part for api key auth.
+For Production ( uses Node )
+```
+    npm run start
+```
+For Devlopment ( uses Nodemon )
+```
+    npm run dev
+```
 
 ## API Authentication
 
@@ -12,13 +20,13 @@ Requests need to be authenticated such that any third party cannot request resou
     Added an API key system where every request should contain a token encrypted using the API key which will be decrypted to check if it's valid or not
         
         {
-            ...
-
             Headers: {
-                x-api-key: // API Key....
-            }
+                ...
 
-            ...
+                x-api-key: // API Key....
+            
+                ...
+            }
         }
 
     ### Error
@@ -60,7 +68,8 @@ Requests need to be authenticated such that any third party cannot request resou
         ```
 
     - **Authentication:**
-        Now we check if user is present in our database, if yes we set and cookie as jwt token (uid as payload). Else throw an error.
+        Now we check if user is present in our database, if yes we set and cookie <code>auth-token</code> as jwt token (uid as payload, default expiry - 2h). Else throw an error.
+
     - **Error:**
         ```
             {
@@ -68,3 +77,17 @@ Requests need to be authenticated such that any third party cannot request resou
                 message: "Forbidden: User not found!"
             }
         ```
+        ```
+            {
+                status: 401,
+                message: "Email or password is wrong"
+            }
+        ```
+
+- ### Logout
+
+    Logout will be handled in the frontend by simply deleting the <code>auth-token</code> cookie.
+
+- ### Email Verification
+
+- ### Forgot Password
