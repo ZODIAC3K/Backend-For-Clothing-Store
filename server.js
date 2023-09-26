@@ -34,7 +34,7 @@ app.use(auth.apiKey);
 
 // Routes....
 
-app.use("/api/v1/auth", authRouter);
+app.use('/api/v1/auth', authRouter);
 
 app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
 
