@@ -1,5 +1,5 @@
 const { DEBUG_MODE } = require('../config');
-const CustomErrorHandler = require('../services/CustomErrorHandler');
+const { CustomErrorHandler } = require('../services');
 
 const errorHandler = (err, req, res, next) => {
 

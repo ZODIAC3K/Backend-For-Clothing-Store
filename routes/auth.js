@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router();
 const authController = require("../controllers/authController");
-const CustomErrorHandler = require('../services/CustomErrorHandler');
+const { CustomErrorHandler } = require('../services');
 
 // ================= Register ======================
 

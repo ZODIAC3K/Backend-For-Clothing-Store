@@ -1,9 +1,8 @@
 const { SALT, API_KEY } = require("../config");
 const { User } = require("../models");
-const CustomErrorHandler = require("../services/CustomErrorHandler");
+const { JwtService, CustomErrorHandler } = require("../services");
 const uuid = require("uuid");
 const CryptoJS = require("crypto-js");
-const { default: JwtService } = require("../services/JwtService");
 
 // Register user ( only email and password )
 async function registerUser(req, res, next) {
