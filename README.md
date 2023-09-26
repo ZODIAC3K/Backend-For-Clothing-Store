@@ -35,6 +35,28 @@ Requests need to be authenticated such that any third party cannot request resou
             message: "Unauthorized"
         }
 
+- ### <code>Authorization</code> Header
+    For requests from logged in user the frontend will pass the jwt into this header such that the server can verify and give access to the user.
+
+        {
+            Headers: {
+                ...
+                Authorization: // JWT returned by the server stored in 'auth-token' cookie
+                ...
+            }
+        }
+
+- ### Email Verification
+    After JWT verification if the user proceeds to order this middleware will check if the email of the user is verified or not, if not it will redirect it will send the following response
+
+    #### Status Code 300
+
+        {
+            message: "Email ID not verified",
+            redirectTo: "/email-verification"
+        }
+        
+
 ## Routes
 
 - ### Register
@@ -43,12 +65,21 @@ Requests need to be authenticated such that any third party cannot request resou
         ```
             {
                 email: "USERNAME",
-                password: "PASSWORD"
+                password: "PASSWORD",
+                fname: // First Name , 
+                lname: // Last Name,
+                mobile: // 10 digit mobile number
             }
         ```
 
     - **Authentication:**
         Now we check if user is present in our database, if yes we return an error. Else we enter the usernae and password in the database.
+    - **Success:**
+        - #### Status Code 200
+                {
+                    message: "Successfully Registered!",
+                    redirectTo: "/"
+                }
     - **Error:**
         ```
             {
@@ -69,6 +100,13 @@ Requests need to be authenticated such that any third party cannot request resou
 
     - **Authentication:**
         Now we check if user is present in our database, if yes we set and cookie <code>auth-token</code> as jwt token (uid as payload, default expiry - 2h). Else throw an error.
+    
+    - **Success:**
+        - #### Status Code 200
+                {
+                    message: "Logged in sucessfully!",
+                    redirectTo: "/"
+                }
 
     - **Error:**
         ```

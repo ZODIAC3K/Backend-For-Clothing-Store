@@ -1,7 +1,7 @@
-const apiAuth = require('./apiAuth');
+const auth = require('./auth');
 const errorHandler = require('./errorHandler');
 
 module.exports = {
-    apiAuth,
+    auth,
     errorHandler
 }
