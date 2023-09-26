@@ -44,7 +44,6 @@ app.use(express.json());
 app.use(apiAuth);
 
 // Routes....
-
 app.use('/api/v1/auth', authRouter);
 
 
