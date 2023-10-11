@@ -130,6 +130,12 @@ Requests need to be authenticated such that any third party cannot request resou
 
 - ### Forgot Password
 
+- ### Admin
+
+- ### Products
+
+
+
 ## Controllers
 
 - ### Image Controller

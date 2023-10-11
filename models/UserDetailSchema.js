@@ -60,6 +60,7 @@ const UserDetailSchema = new mongoose.Schema({
 	created_at: { type: Date, default: Date.now() },
 	modified_at: { type: Date, default: Date.now() },
 	coupon_used: [{ type: mongoose.Schema.Types.ObjectId, ref: "Coupon" }],
+	savedAddress: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }]
 });
 
 const UserDetail = mongoose.model("UserDetail", UserDetailSchema);
