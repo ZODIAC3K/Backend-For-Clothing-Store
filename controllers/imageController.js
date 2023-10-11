@@ -2,7 +2,6 @@ const { MulterError } = require("multer");
 const { ImageDetails } = require("../models");
 const { upload, CustomErrorHandler } = require("../services");
 const fs = require("fs");
-const path = require("path");
 
 // Make sure to use error handling where ever this is used.
 async function insertImage() {
@@ -71,3 +70,10 @@ async function insertMultipleImages() {
 		throw new Error("Error during image insertion: " + error.message);
 	}
 }
+
+const imageController = {
+	insertImage,
+	insertMultipleImages
+}
+
+module.exports = imageController
