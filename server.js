@@ -7,6 +7,7 @@ const {
 	JWT_SECRET,
 	APP_URL,
 } = require("./config");
+const Token = require("./models/verification_tokens");
 const path = require("path");
 // This auth contains middlewares that check if the user that is requested has valid credentials or not
 const { auth, errorHandler } = require("./middlewares");
@@ -35,8 +36,30 @@ app.use(auth.apiKey);
 // Routes....
 
 app.use('/api/v1/auth', authRouter);
-
 app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
+
+// ================= Email Verification =========================
+app.get("/:id/verify/:token/", async (req, res) => {
+	try {
+		const user = await User.findOne({ _id: req.params.id });
+		if (!user) return res.status(400).send({ message: "Invalid link" });
+
+		const token = await Token.findOne({
+			userId: user._id,
+			token: req.params.token,
+		});
+		if (!token) return res.status(400).send({ message: "Invalid link" });
+
+		await User.updateOne({ _id: user._id, verified: true });
+		await token.remove();
+
+		res.status(200).send({ message: "Email verified successfully" });
+	} catch (error) {
+		res.status(500).send({ message: "Internal Server Error" });
+	}
+});
+
+app.all('/:id/verify/:token/',()=>{ throw CustomErrorHandler.badRequest(); });
 
 // Error Handling middleware
 

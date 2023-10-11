@@ -60,7 +60,7 @@ Requests need to be authenticated such that any third party cannot request resou
 ## Routes
 
 - ### Register
-    - **Path** <code>/api/v1/auth/register</code>
+    - **Path** <code>/api/v1/auth/reg</code>
     - **Body:**
         ```
             {

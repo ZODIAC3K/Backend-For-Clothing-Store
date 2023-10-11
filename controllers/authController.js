@@ -2,6 +2,11 @@ const { SALT, API_KEY } = require("../config");
 const { User } = require("../models");
 const { JwtService, CustomErrorHandler } = require("../services");
 const CryptoJS = require("crypto-js");
+const sendEmail = require("../controllers/emailVarification");
+const Token = require("../models/verification_tokens");
+const {
+	APP_URL,
+} = require("../config");
 
 // Register user ( only email and password )
 async function registerUser(req, res, next) {
@@ -38,8 +43,20 @@ async function registerUser(req, res, next) {
 				const encryptedUserId = JwtService.sign({
 					id: user._id,
 				});
-				// Send Verification email here as well..................
 				
+				const verificationToken = new Token({
+                    userId: user._id,
+                    token: jwt.sign({ userId: user._id }, API_KEY, { expiresIn: '1h' }),
+                });
+                verificationToken.save()
+                    .then((token) => {
+                        const verificationLink = `${APP_URL}/users/${user._id}/verify/${token.token}`;
+
+                        // Send verification email
+                        const subject = "Email Verification";
+                        const text = `Click the following link to verify your email: ${verificationLink}`;
+                        sendEmail(email, subject, text);
+                    })
 
 				
 				res.cookie("auth-token", encryptedUserId, {
