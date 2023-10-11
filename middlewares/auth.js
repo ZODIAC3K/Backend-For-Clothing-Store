@@ -48,7 +48,7 @@ async function emailStatusVerification ( req, res, next) {
         _id: user.id
     }).then(user => {
         if (!user.email_verification){
-            return res.status(300).message({ message: "Email ID not verified", redirectTo: "/email-verification"})
+            return res.status(300).message({ message: "Email ID not verified", redirectTo: "/email-verification"}) // checks status everytime for users.
         } else {
             next();
         }

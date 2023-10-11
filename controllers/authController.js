@@ -38,7 +38,10 @@ async function registerUser(req, res, next) {
 				const encryptedUserId = JwtService.sign({
 					id: user._id,
 				});
+				// Send Verification email here as well..................
+				
 
+				
 				res.cookie("auth-token", encryptedUserId, {
 					httpOnly: true,
 					maxAge: 7200000,
@@ -90,7 +93,7 @@ async function loginUser(req, res, next) {
 
 			return res
 				.status(200)
-				.json({ message: "Logged in sucessfully!", redirectTo: "/" });
+				.json({ message: "Logged in sucessfully!", redirectTo: "/" }); // send profile information as well...
 		});
 	} catch (err) {
 		next(err);
