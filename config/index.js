@@ -7,5 +7,13 @@ module.exports = {
   DB_URL: process.env.DB_URL,
   JWT_SECRET: process.env.JWT_SECRET,
   API_KEY: process.env.API_KEY,
-  SALT: process.env.SALT
+  SALT: process.env.SALT,
+  APP_URL: process.env.APP_URL,
+  HOST: process.env.HOST,
+  SERVICE: process.env.SERVICE,
+  EMAIL_PORT: process.env.EMAIL_PORT,
+  SECURE: process.env.SECURE,
+  USER: process.env.USER,
+  PASS: process.env.PASS,
+  F_APP_URL: process.env.F_APP_URL
 };

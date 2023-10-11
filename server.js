@@ -1,11 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { CustomErrorHandler } = require("./services");
+const { User } = require("./models");
 const {
 	APP_PORT,
-	DEBUG_MODE,
 	DB_URL,
-	JWT_SECRET,
-	APP_URL,
+	F_APP_URL,
 } = require("./config");
 const Token = require("./models/verification_tokens");
 const path = require("path");
@@ -31,38 +31,37 @@ db.once("open", () => {
 });
 app.use(express.urlencoded({ extended: true })); // leave it true because we are dealing with nested json object not the flat json sometime.
 app.use(express.json());
-app.use(auth.apiKey);
 
-// Routes....
-
-app.use('/api/v1/auth', authRouter);
-app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
 
 // ================= Email Verification =========================
 app.get("/:id/verify/:token/", async (req, res) => {
 	try {
 		const user = await User.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link" });
+		if (!user) return res.status(400).send({ message: "Invalid link -- user issue" });
 
 		const token = await Token.findOne({
 			userId: user._id,
 			token: req.params.token,
 		});
-		if (!token) return res.status(400).send({ message: "Invalid link" });
-
-		await User.updateOne({ _id: user._id, verified: true });
+		if (!token) return res.status(400).send({ message: "Invalid link -- token issue" });
+		await User.updateOne({ _id: user._id}, {email_verification: true });
 		await token.remove();
-
-		res.status(200).send({ message: "Email verified successfully" });
+		res.redirect(302, `${F_APP_URL}`);
+	
 	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
+		res.status(400).send({ message: "Invalid link -- internal server issue" });
 	}
 });
-
 app.all('/:id/verify/:token/',()=>{ throw CustomErrorHandler.badRequest(); });
 
-// Error Handling middleware
+// API KEY AUTH CHECK
+app.use(auth.apiKey);
 
+// Routes....
+app.use('/api/v1/auth', authRouter);
+app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
+
+// Error Handling middleware
 app.use(errorHandler);
 
 // Display Listening Port

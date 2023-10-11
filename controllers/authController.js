@@ -1,12 +1,9 @@
-const { SALT, API_KEY } = require("../config");
+const { SALT, API_KEY, APP_URL, APP_PORT } = require("../config");
 const { User } = require("../models");
 const { JwtService, CustomErrorHandler } = require("../services");
 const CryptoJS = require("crypto-js");
 const sendEmail = require("../controllers/emailVarification");
 const Token = require("../models/verification_tokens");
-const {
-	APP_URL,
-} = require("../config");
 
 // Register user ( only email and password )
 async function registerUser(req, res, next) {
@@ -46,11 +43,11 @@ async function registerUser(req, res, next) {
 				
 				const verificationToken = new Token({
                     userId: user._id,
-                    token: jwt.sign({ userId: user._id }, API_KEY, { expiresIn: '1h' }),
+                    token: JwtService.sign({ userId: user._id },'1h', API_KEY ),
                 });
                 verificationToken.save()
                     .then((token) => {
-                        const verificationLink = `${APP_URL}/users/${user._id}/verify/${token.token}`;
+                        const verificationLink = `${APP_URL}:${APP_PORT}/${user._id}/verify/${token.token}`;
 
                         // Send verification email
                         const subject = "Email Verification";
