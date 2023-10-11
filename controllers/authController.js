@@ -26,7 +26,7 @@ async function registerUser(req, res, next) {
 
 		const userData = {
 			email: email,
-			pass: CryptoJS.AES.encrypt(password, SALT),
+			password: CryptoJS.AES.encrypt(password, SALT),
 			fname: fname,
 			lname: lname,
 			mobile: mobile,
@@ -47,9 +47,12 @@ async function registerUser(req, res, next) {
 					maxAge: 7200000,
 				});
 
+				const { email, password, ...userDetails } = user;
+
 				return res.status(200).json({
 					message: "Successfully Registered!",
 					redirectTo: "/",
+					userDetails
 				});
 			})
 			.catch((err) => {
@@ -91,9 +94,11 @@ async function loginUser(req, res, next) {
 				maxAge: 7200000,
 			});
 
+			const { email, password, ...userDetails } = user;
+
 			return res
 				.status(200)
-				.json({ message: "Logged in sucessfully!", redirectTo: "/" }); // send profile information as well...
+				.json({ message: "Logged in sucessfully!", redirectTo: "/", userDetails }); // send profile information as well...
 		});
 	} catch (err) {
 		next(err);
