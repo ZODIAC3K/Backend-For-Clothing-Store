@@ -40,33 +40,40 @@ async function registerUser(req, res, next) {
 				const encryptedUserId = JwtService.sign({
 					id: user._id,
 				});
-				
+
 				const verificationToken = new Token({
-                    userId: user._id,
-                    token: JwtService.sign({ userId: user._id },'1h', API_KEY ),
-                });
-                verificationToken.save()
-                    .then((token) => {
-                        const verificationLink = `${APP_URL}:${APP_PORT}/${user._id}/verify/${token.token}`;
+					userId: user._id,
+					token: JwtService.sign({ userId: user._id }, "1h", API_KEY),
+				});
+				verificationToken.save().then((token) => {
+					const verificationLink = `${APP_URL}:${APP_PORT}/${user._id}/verify/${token.token}`;
 
-                        // Send verification email
-                        const subject = "Email Verification";
-                        const text = `Click the following link to verify your email: ${verificationLink}`;
-                        sendEmail(email, subject, text);
-                    })
+					// Send verification email
+					const subject = "Email Verification";
+					const text = `Click the following link to verify your email: ${verificationLink}`;
+					sendEmail(email, subject, text);
+				});
 
-				
 				res.cookie("auth-token", encryptedUserId, {
 					httpOnly: true,
 					maxAge: 7200000,
 				});
 
-				const { email, password, ...userDetails } = user;
+				const userDetails = {
+					email: user.email,
+					fname: user.fname,
+					lname: user.lname,
+					mobile: user.mobile,
+					created_at: user.created_at,
+					savedAddress: user.savedAddress,
+					email_verification: user.email_verification,
+					coupon_used: user.coupon_used,
+				};
 
 				return res.status(200).json({
 					message: "Successfully Registered!",
 					redirectTo: "/",
-					userDetails
+					userDetails,
 				});
 			})
 			.catch((err) => {
@@ -107,11 +114,24 @@ async function loginUser(req, res, next) {
 				maxAge: 7200000,
 			});
 
-			const { email, password, ...userDetails } = user;
+			const userDetails = {
+				email: user.email,
+				fname: user.fname,
+				lname: user.lname,
+				mobile: user.mobile,
+				created_at: user.created_at,
+				savedAddress: user.savedAddress,
+				email_verification: user.email_verification,
+				coupon_used: user.coupon_used,
+			};
 
 			return res
 				.status(200)
-				.json({ message: "Logged in sucessfully!", redirectTo: "/", userDetails }); // send profile information as well...
+				.json({
+					message: "Logged in sucessfully!",
+					redirectTo: "/",
+					userDetails,
+				});
 		});
 	} catch (err) {
 		next(err);
