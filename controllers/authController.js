@@ -79,7 +79,6 @@ async function registerUser(req, res, next) {
 }
 
 // Log user in based on credentials ( email, password )
-
 async function loginUser(req, res, next) {
 	try {
 		const { email, password } = req.body;

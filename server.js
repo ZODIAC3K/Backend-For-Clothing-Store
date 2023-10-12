@@ -1,13 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { CustomErrorHandler } = require("./services");
+const { JwtService, CustomErrorHandler } = require("./services");
 const { User } = require("./models");
 const {
+	APP_URL,
 	APP_PORT,
 	DB_URL,
 	F_APP_URL,
+	API_KEY
 } = require("./config");
+const sendEmail = require("./controllers/emailVarification");
 const Token = require("./models/verification_tokens");
+
 const path = require("path");
 // This auth contains middlewares that check if the user that is requested has valid credentials or not
 const { auth, errorHandler } = require("./middlewares");
@@ -53,6 +57,44 @@ app.get("/:id/verify/:token/", async (req, res) => {
 	}
 });
 app.all('/:id/verify/:token/',()=>{ throw CustomErrorHandler.badRequest(); });
+
+app.post('/send-verification-link/:id/', async (req, res) => {
+	try {
+	  // Check if the provided ID is in a valid ObjectId format
+	  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+		return res.status(400).json({ message: "Invalid ID format" });
+	  }
+  
+	  const user = await User.findOne({ _id: req.params.id });
+  
+	  if (user) {
+		if (user.email_verification === false) {
+			const verificationToken = new Token({
+				userId: user._id,
+				token: JwtService.sign({ userId: user._id },'1h', API_KEY ),
+			});
+			verificationToken.save()
+			.then((token) => {
+				const verificationLink = `${APP_URL}:${APP_PORT}/${user._id}/verify/${token.token}`;
+	  
+		  		// Send verification email
+		  		const subject = "Email Verification";
+		  		const text = `Click the following link to verify your email: ${verificationLink}`;
+		  		sendEmail(user.email, subject, text);
+		  		res.status(200).json({ message: "Verification Link Sent" });
+			})
+		  	
+		} else {
+		  res.status(400).json({ message: "Email already verified" });
+		}
+	  } else {
+		res.status(404).json({ message: "User not found" });
+	  }
+	} catch (error) {
+	  console.error('An error occurred:', error);
+	  res.status(500).json({ message: "Internal server error" });
+	}
+  });
 
 // API KEY AUTH CHECK
 app.use(auth.apiKey);
