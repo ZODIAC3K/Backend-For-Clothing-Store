@@ -9,7 +9,8 @@ const {
 	F_APP_URL,
 	API_KEY
 } = require("./config");
-const sendEmail = require("./controllers/emailVarification");
+// const sendEmail = require("./controllers/emailVarification");
+const { emailVarification: sendEmail } = require("./controllers");
 const Token = require("./models/verification_tokens");
 
 const path = require("path");
@@ -37,7 +38,7 @@ app.use(express.urlencoded({ extended: true })); // leave it true because we are
 app.use(express.json());
 
 
-// ================= Email Verification =========================
+// ================= Email Verification Processing =================
 app.get("/:id/verify/:token/", async (req, res) => {
 	try {
 		const user = await User.findOne({ _id: req.params.id });
@@ -57,7 +58,7 @@ app.get("/:id/verify/:token/", async (req, res) => {
 	}
 });
 app.all('/:id/verify/:token/',()=>{ throw CustomErrorHandler.badRequest(); });
-
+// ================= Email Verification Sent ================
 app.post('/send-verification-link/:id/', async (req, res) => {
 	try {
 	  // Check if the provided ID is in a valid ObjectId format
@@ -95,27 +96,28 @@ app.post('/send-verification-link/:id/', async (req, res) => {
 	  res.status(500).json({ message: "Internal server error" });
 	}
   });
+  app.all('/send-verification-link/:id/',()=>{ throw CustomErrorHandler.badRequest(); });
 
-// API KEY AUTH CHECK
+// ================ API KEY AUTH CHECK ================
 app.use(auth.apiKey);
 
-// Routes....
+// ================ Routes ================
 app.use('/api/v1/auth', authRouter);
 app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
 
-// Error Handling middleware
+// ================ Error Handling middleware ================
 app.use(errorHandler);
 
-// Display Listening Port
+// ================ Display Listening Port ================
 app.listen(APP_PORT, () => {
 	console.log(`Listening on port ${APP_PORT}`);
 });
 
-// Gracefully handle application shutdown
+// ================ Handling Application Shutdown ================
 process.on("SIGINT", () => {
 	console.log(
-		"----------------- Interruption Detected On Server!!! ---------------------------------- Closing Database Connection... -----------------"
-	); // server operations intrupted so close the db connection manually.
+		"----------------- Interruption Detected On Server!!! ==> Closing Database Connection... -----------------"
+	);
 	db.close(() => {
 		console.log("Database Connection Closed. Exiting...");
 		process.exit(0);
