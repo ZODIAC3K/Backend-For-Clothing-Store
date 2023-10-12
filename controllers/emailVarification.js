@@ -8,7 +8,7 @@ const {
 	PASS,
 } = require("../config");
 
-module.exports = async (email, subject, text) => {
+async function sendEmail(email, subject, text) {
 	try {
 		const transporter = nodemailer.createTransport({
 			host: HOST,
@@ -34,3 +34,5 @@ module.exports = async (email, subject, text) => {
 		return error;
 	}
 };
+
+module.exports = sendEmail;

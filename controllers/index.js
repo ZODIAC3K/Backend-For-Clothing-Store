@@ -1,9 +1,9 @@
 const authController = require('./authController');
 const imageController = require('./imageController')
-const emailVarification = require('./emailVarification')
+const sendEmail = require('./emailVarification')
 
 module.exports = {
     authController,
     imageController,
-    emailVarification
+    sendEmail
 }

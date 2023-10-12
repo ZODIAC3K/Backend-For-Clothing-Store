@@ -2,8 +2,7 @@ const { SALT, API_KEY, APP_URL, APP_PORT } = require("../config");
 const { User } = require("../models");
 const { JwtService, CustomErrorHandler } = require("../services");
 const CryptoJS = require("crypto-js");
-// const sendEmail = require("../controllers/emailVarification");
-const { emailVarification: sendEmail } = require("../controllers");
+const sendEmail = require("../controllers/emailVarification");
 const Token = require("../models/verification_tokens");
 
 // Register user ( only email and password )
