@@ -5,67 +5,51 @@ const { UserDetail } = require("./models");
 const {
 	APP_PORT,
 	DB_URL,
-	F_APP_URL,
 } = require("./config");
 const {Token} = require("./models");
 const path = require("path");
 // This auth contains middlewares that check if the user that is requested has valid credentials or not
 const { auth, errorHandler} = require("./middlewares");
-const { authRouter } = require("./routes");
+const { authRouter, emailVerificationRouter } = require("./routes");
 const app = express();
 const cors = require("cors");
 
+
+// ================= Cors =================
 app.use(cors()); // allows api call from all origin. {remove it in deployment}
 // {uncomment below 3 lines in deployment}
 // app.use(cors({
 //   origin: "localhost:3000" // change it to required URL on deployment.
 // }));
 
-// Database Connection
+// ================= Database Connection =================
 dbConnect()
 
 app.use(express.urlencoded({ extended: true })); // leave it true because we are dealing with nested json object not the flat json sometime.
 app.use(express.json());
 
 
-// ================= Email Verification =========================
-app.get("/:id/verify/:token/", async (req, res) => {
-	try {
-		const user = await UserDetail.findOne({ _id: req.params.id });
-		if (!user) return res.status(400).send({ message: "Invalid link -- user issue" });
 
-		const token = await Token.findOne({
-			userId: user._id,
-			token: req.params.token,
-		});
-		if (!token) return res.status(400).send({ message: "Invalid link -- token issue" });
-		await UserDetail.updateOne({ _id: user._id}, {email_verification: true });
-		await token.remove();
-		res.redirect(302, `${F_APP_URL}`);
-	
-	} catch (error) {
-		console.error(error);
-		res.status(400).send({ message: "Invalid link -- internal server issue" });
-	}
-});
-app.all('/:id/verify/:token/',()=>{ throw CustomErrorHandler.badRequest(); });
 
-// API KEY AUTH CHECK
+// ================= Email Verification  =================
+app.use(emailVerificationRouter);
+
+// ================ API KEY AUTH CHECK ================
 app.use(auth.apiKey);
 
-// Routes....
+// ================ Routes ================
 app.use('/api/v1/auth', authRouter);
 app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
 
-// Error Handling middleware
+// ================ Error Handling middleware ================
 app.use(errorHandler);
 
-// Display Listening Port
+// ================ Display Listening Port ================
 app.listen(APP_PORT, () => {
 	console.log(`Listening on port ${APP_PORT}`);
 });
 
-// Gracefully handle application shutdown
+// ================ Handling Application Shutdown ================
 process.on("SIGINT", () => {
 	console.log(
 		"----------------- Interruption Detected On Server!!! ---------------------------------- Closing Database Connection... -----------------"

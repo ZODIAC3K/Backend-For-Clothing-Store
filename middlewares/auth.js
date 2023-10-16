@@ -48,7 +48,7 @@ async function emailStatusVerification ( req, res, next) {
         _id: user.id
     }).then(user => {
         if (!user.email_verification){
-            return res.status(300).message({ message: "Email ID not verified", redirectTo: "/email-verification"}) // checks status everytime for users.
+            return res.status(300).message({ message: "Email ID not verified", button_link: `/send-email-verification/${user._id}`}) // in front end call button link and it will send confirmation link on email.
         } else {
             next();
         }
