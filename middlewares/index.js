@@ -3,5 +3,5 @@ const errorHandler = require('./errorHandler');
 
 module.exports = {
     auth,
-    errorHandler
+    errorHandler,
 }

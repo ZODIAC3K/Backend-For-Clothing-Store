@@ -9,4 +9,4 @@ const productReviewSchema = new mongoose.Schema({
 
 const ProductReviewDetails = mongoose.model('ProductReview', productReviewSchema);
 
-module.exports = ProductReviewDetails;
+module.exports = {ProductReviewDetails, productReviewSchema};

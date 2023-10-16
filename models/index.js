@@ -1,19 +1,25 @@
 const {
 	Product,
 	StockDetail,
+	productDetailsSchema,
+	stockDetailSchema,
 } = require("./ProductDetailsSchema");
-const BrandDetails = require("./BrandDetailsSchema");
-const CategoryDetails = require("./CategoryDetailsSchema");
+const {BrandDetails, brandSchema} = require("./BrandDetailsSchema");
+const {CategoryDetails, categorySchema} = require("./CategoryDetailsSchema");
 const ImageDetails = require("./ImageDetailsSchema");
-const CouponDetails = require("./CouponDetailsSchema");
-const OfferDetails = require("./OfferDetailsSchema");
-const ProductReviewDetails = require("./ProductReviewDetails");
-const BannerDetails = require("./BannerDetailsSchema");
-const OrderDetails = require("./OrderDetailsSchema");
-const ReturnDetails = require("./ReturnDetailsSchema");
-const ModificationTrackingDetails = require("./ModificationTrackingDetails");
-const Admin = require("./AdminSchema");
-const User = require("./UserDetailSchema");
+const {CouponDetails, couponSchema} = require("./CouponDetailsSchema");
+const {OfferDetails, offerSchema} = require("./OfferDetailsSchema");
+const {ProductReviewDetails, productReviewSchema} = require("./ProductReviewDetails");
+const {BannerDetails, bannerSchema} = require("./BannerDetailsSchema");
+const {OrderDetails, orderSchema} = require("./OrderDetailsSchema");
+const {ReturnDetails, returnSchema} = require("./ReturnDetailsSchema");
+const {ModificationTrackingDetails, modificationTrackingDetailsSchema} = require("./ModificationTrackingDetails");
+const {Admin, adminSchema} = require("./AdminSchema");
+const {UserDetail, userDetailSchema} = require("./UserDetailSchema");
+const { Token, tokenSchema } = require("./VerificationTokens");
+const { Address, addressSchema } = require("./AddressSchema");
+const { Transaction, transactionSchema } = require("./TransactionSchema");
+
 
 module.exports = {
 	Product,
@@ -29,5 +35,24 @@ module.exports = {
 	ReturnDetails,
 	ModificationTrackingDetails,
 	Admin,
-	User,
+	UserDetail,
+	Token,
+	Address,
+	Transaction,
+	productDetailsSchema,
+	stockDetailSchema,
+	brandSchema,
+	categorySchema,
+	couponSchema,
+	offerSchema,
+	productReviewSchema,
+	bannerSchema,
+	orderSchema,
+	returnSchema,
+	modificationTrackingDetailsSchema,
+	adminSchema,
+	userDetailSchema,
+	tokenSchema,
+	addressSchema,
+	transactionSchema,
 };

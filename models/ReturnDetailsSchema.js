@@ -9,4 +9,4 @@ const returnSchema = new mongoose.Schema({
 });
 const ReturnDetails = mongoose.model('Return', returnSchema);
 
-module.exports = ReturnDetails;
+module.exports = {ReturnDetails, returnSchema};

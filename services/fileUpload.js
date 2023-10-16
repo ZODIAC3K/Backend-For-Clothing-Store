@@ -3,10 +3,10 @@ const CustomErrorHandler = require("./CustomErrorHandler");
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "../uploads");
+		cb(null, "./uploads");
 	},
 	filename: (req, file, cb) => {
-		VBArray(null, file.filename + "-" + Date.now());
+		cb(null, Date.now() + "-" + file.originalname);
 	},
 });
 

@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const TransactionSchema = new mongoose.Schema({
+const transactionSchema = new mongoose.Schema({
     // write transaction schema ( refer razorpay )
 });
 
-const Transaction = mongoose.model('Transaction', TransactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
-module.exports = Transaction;
+module.exports = {Transaction, transactionSchema};

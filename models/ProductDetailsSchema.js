@@ -28,5 +28,7 @@ const StockDetail = mongoose.model('StockDetail', stockDetailSchema)
 
 module.exports = { 
   Product,
-  StockDetail, 
+  StockDetail,
+  productDetailsSchema,
+  stockDetailSchema
 };

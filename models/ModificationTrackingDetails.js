@@ -9,4 +9,4 @@ const modificationTrackingDetailsSchema = new mongoose.Schema({
 
 const ModificationTrackingDetails = mongoose.model('ModificationTrackingDetails', modificationTrackingDetailsSchema);
 
-module.exports = ModificationTrackingDetails;
+module.exports = {ModificationTrackingDetails, modificationTrackingDetailsSchema};

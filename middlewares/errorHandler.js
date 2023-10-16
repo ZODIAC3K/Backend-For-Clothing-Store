@@ -17,7 +17,7 @@ const errorHandler = (err, req, res, next) => {
   }
 
   if ( statusCode === 500 && DEBUG_MODE )
-    console.error(err); 
+    console.log(err); 
 
   res.status(statusCode).json(data);
 };

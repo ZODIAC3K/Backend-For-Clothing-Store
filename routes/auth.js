@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router();
 const { authController } = require("../controllers");
-const { CustomErrorHandler } = require('../services');
+const { CustomErrorHandler, upload } = require('../services');
 
 
 // ================= Register ======================
 
-router.post('/reg',authController.register);
+router.post('/reg', upload.single('image') ,authController.register);
 router.all('/reg',()=>{ throw CustomErrorHandler.badRequest(); });
 
 // ================= Login =========================

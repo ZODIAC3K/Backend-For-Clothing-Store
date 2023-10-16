@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const UserDetailSchema = new mongoose.Schema({
+const userDetailSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
@@ -56,6 +56,7 @@ const UserDetailSchema = new mongoose.Schema({
 	profile_picture: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "ImageDetail",
+		default: null
 	},
 	created_at: { type: Date, default: Date.now() },
 	modified_at: { type: Date, default: Date.now() },
@@ -63,6 +64,6 @@ const UserDetailSchema = new mongoose.Schema({
 	savedAddress: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }]
 });
 
-const UserDetail = mongoose.model("UserDetail", UserDetailSchema);
+const UserDetail = mongoose.model("UserDetail", userDetailSchema);
 
-module.exports = UserDetail;
+module.exports = {UserDetail, userDetailSchema};
