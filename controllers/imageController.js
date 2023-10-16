@@ -11,7 +11,7 @@ async function insertImage(image) {
 		content_type: file.mimetype,
 	})
 	const savedImage = await imageDocument.save()
-	fs.unlink(file.path);
+	fs.unlinkSync(file.path);
 
 	return savedImage._id;
 
@@ -31,7 +31,7 @@ async function insertMultipleImages() {
 		});
 
 		const savedImage = await imageDocument.save();
-		fs.unlink(file.path);
+		fs.unlinkSync(file.path);
 		imageIds.push(savedImage._id);
 	}
 

@@ -1,6 +1,6 @@
 const { API_KEY } = require('../config');
 const CryptoJS = require('crypto-js');
-const { User } = require('../models');
+const { UserDetail } = require('../models');
 const { JwtService, CustomErrorHandler } = require('../services');
 
 // Add cryto part for the api key auth
@@ -44,7 +44,7 @@ async function emailStatusVerification ( req, res, next) {
     
     const user = JwtService.verify(req.headers['authorization'])
 
-    await User.findOne({
+    await UserDetail.findOne({
         _id: user.id
     }).then(user => {
         if (!user.email_verification){

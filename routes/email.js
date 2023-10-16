@@ -4,8 +4,8 @@ const router = express.Router();
 const { JwtService, CustomErrorHandler } = require("../services");
 const { User } = require("../models");
 const { APP_URL, APP_PORT, F_APP_URL, API_KEY } = require("../config");
-const { sendEmail } = require("../controllers");
-const Token = require("../models/verification_tokens");
+const { sendEmail } = require("../services");
+const {Token} = require("../models");
 
 // ================= Email Verification Link Sent ================
 router.post("/send-verification-link/:id/", async (req, res) => {

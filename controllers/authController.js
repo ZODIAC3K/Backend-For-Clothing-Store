@@ -10,7 +10,7 @@ async function registerUser(req, res, next) {
 	try {
 		const { email, password, fname, lname, mobile } = req.body;
 
-		const userRec = await User.findOne({
+		const userRec = await UserDetail.findOne({
 			email: email,
 		}).catch((error) => {
 			next(error);
@@ -25,8 +25,8 @@ async function registerUser(req, res, next) {
 			);
 			return;
 		}
-
-		req.image = req.file !== null? await insertImage(req.file) : null
+		console.log(req.file);
+		req.image = req.file != null? await insertImage(req.file) : null
 
 		const userData = {
 			email: email,
@@ -68,7 +68,7 @@ async function registerUser(req, res, next) {
 					fname: savedUser.fname,
 					lname: savedUser.lname,
 					mobile: savedUser.mobile,
-					profile_picture: {data:user.profile_picture.data,content_type:user.profile_picture.content_type},
+					profile_picture: user.profile_picture != null? {data:user.profile_picture.data,content_type:user.profile_picture.content_type} : null,
 					created_at: savedUser.created_at,
 					savedAddress: savedUser.savedAddress,
 					email_verification: savedUser.email_verification,
