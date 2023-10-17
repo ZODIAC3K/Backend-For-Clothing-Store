@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 
 const stockDetailSchema = new mongoose.Schema({
+  product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
   color: String,
   size: String,
   amount: Number,
@@ -17,7 +18,7 @@ const productDetailsSchema = new mongoose.Schema({
   category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
   brand: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Brand' }],
   stock_details: [{ type: mongoose.Schema.Types.ObjectId, ref: 'StockDetail' }],
-  rating: Number,
+  rating: { type: Number, default: 0 },
   created_at: { type: Date, default: Date.now() },
   modified_at: { type: Date, default: Date.now() },
 });
