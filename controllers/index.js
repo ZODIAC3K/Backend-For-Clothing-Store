@@ -7,5 +7,7 @@ const productController = require('./productController')
 module.exports = {
     authController,
     imageController,
-    userController
+    userController,
+    adminController,
+    productController
 }
