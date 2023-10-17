@@ -1,15 +1,16 @@
 const JwtService = require('./JwtService');
 const upload = require('./fileUpload');
 const CustomErrorHandler = require('./CustomErrorHandler');
-const dbConnect = require('./dbConnection');
 const sendEmail = require('./emailVerification');
-const populateAllAttributes = require('./populateDocs')
+const populateAllAttributes = require('./populateDocs');
+const DatabaseConnection = require('./dbConnection');
+
 
 module.exports = {
     JwtService,
     upload,
     CustomErrorHandler,
-    dbConnect,
+    DatabaseConnection,
     sendEmail,
     populateAllAttributes
 }

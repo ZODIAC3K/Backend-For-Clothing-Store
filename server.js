@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { CustomErrorHandler, dbConnect } = require("./services");
+const { CustomErrorHandler, DatabaseConnection } = require("./services");
 const { UserDetail } = require("./models");
 const {
 	APP_PORT,
@@ -23,13 +23,11 @@ app.use(cors()); // allows api call from all origin. {remove it in deployment}
 // }));
 
 // ================= Database Connection =================
-dbConnect()
+const conn = new DatabaseConnection();
+conn.connectToDatabase();
 
 app.use(express.urlencoded({ extended: true })); // leave it true because we are dealing with nested json object not the flat json sometime.
 app.use(express.json());
-
-
-
 
 // ================= Email Verification  =================
 app.use(emailVerificationRouter);
@@ -54,8 +52,6 @@ process.on("SIGINT", () => {
 	console.log(
 		"----------------- Interruption Detected On Server!!! ---------------------------------- Closing Database Connection... -----------------"
 	); // server operations intrupted so close the db connection manually.
-	mongoose.connection.close(() => {
-		console.log("Database Connection Closed. Exiting...");
-		process.exit(0);
-	});
+	conn.closeConnection()
+	process.exit(0)
 });

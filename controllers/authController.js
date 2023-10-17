@@ -127,7 +127,7 @@ async function loginUser(req, res, next) {
 				fname: user.fname,
 				lname: user.lname,
 				mobile: user.mobile,
-				profile_picture: {data: user.profile_picture.data, content_type: user.profile_picture.content_type},
+				profile_picture: user.profile_picture != null? {data:user.profile_picture.data,content_type:user.profile_picture.content_type} : null,
 				created_at: user.created_at,
 				savedAddress: user.savedAddress,
 				email_verification: user.email_verification,
