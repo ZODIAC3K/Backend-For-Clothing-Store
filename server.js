@@ -1,19 +1,11 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const { CustomErrorHandler, DatabaseConnection } = require("./services");
-const { UserDetail } = require("./models");
-const {
-	APP_PORT,
-	DB_URL,
-} = require("./config");
-const {Token} = require("./models");
-const path = require("path");
+const { DatabaseConnection } = require("./services");
+const { APP_PORT } = require("./config");
 // This auth contains middlewares that check if the user that is requested has valid credentials or not
-const { auth, errorHandler} = require("./middlewares");
-const { authRouter, emailVerificationRouter } = require("./routes");
-const app = express();
+const { auth, errorHandler } = require("./middlewares");
+const { authRouter, emailVerificationRouter, userRouter } = require("./routes");
 const cors = require("cors");
-
+const app = express();
 
 // ================= Cors =================
 app.use(cors()); // allows api call from all origin. {remove it in deployment}
@@ -36,8 +28,11 @@ app.use(emailVerificationRouter);
 app.use(auth.apiKey);
 
 // ================ Routes ================
-app.use('/api/v1/auth', authRouter);
-app.post("/api/v1/test",auth.jwtAuth,(req,res)=>{res.send("hi!")});
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/user", userRouter);
+app.post("/api/v1/test", auth.jwtAuth, (req, res) => {
+	res.send("hi!");
+});
 
 // ================ Error Handling middleware ================
 app.use(errorHandler);
@@ -52,6 +47,6 @@ process.on("SIGINT", () => {
 	console.log(
 		"----------------- Interruption Detected On Server!!! ---------------------------------- Closing Database Connection... -----------------"
 	); // server operations intrupted so close the db connection manually.
-	conn.closeConnection()
-	process.exit(0)
+	conn.closeConnection();
+	process.exit(0);
 });

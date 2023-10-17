@@ -25,7 +25,7 @@ async function registerUser(req, res, next) {
 			);
 			return;
 		}
-		console.log(req.file);
+		
 		req.image = req.file != null? await insertImage(req.file) : null
 
 		const userData = {

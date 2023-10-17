@@ -27,13 +27,15 @@ async function jwtVerification(req, res, next) {
 	try {
 		const token = JwtService.verify(req.headers["authorization"]);
 
-		if (await UserDetail.findById({ id: token.id })) {
+		if (await UserDetail.findById(token.id)) {
 			req.__auth = {
 				role: "user",
+				id: token.id,
 			};
-		} else if (await Admin.findById({ id: token.id })) {
+		} else if (await Admin.findById(token.id)) {
 			req.__auth = {
 				role: "admin",
+				id: token.id,
 			};
 		} else {
 			next(
@@ -83,10 +85,20 @@ async function emailStatusVerification(req, res, next) {
 	});
 }
 
+function checkUserRole(req, res, next) {
+	if (req.__auth.role !== "user") {
+		next(CustomErrorHandler.unAuthorized("Not a 'User'! "));
+		return;
+	}
+
+	next();
+}
+
 const authMiddleware = {
 	apiKey: apiKeyAuth,
 	jwtAuth: jwtVerification,
 	emailStatus: emailStatusVerification,
+	userCheck: checkUserRole,
 };
 
 module.exports = authMiddleware;
