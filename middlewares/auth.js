@@ -27,12 +27,12 @@ async function jwtVerification(req, res, next) {
 	try {
 		const token = JwtService.verify(req.headers["authorization"]);
 
-		if (await UserDetail.findById(token.id)) {
+		if (await UserDetail.findOne({_id : token.id})) {
 			req.__auth = {
 				role: "user",
 				id: token.id,
 			};
-		} else if (await Admin.findById(token.id)) {
+		} else if (await Admin.findOne({_id : token.id})) {
 			req.__auth = {
 				role: "admin",
 				id: token.id,
