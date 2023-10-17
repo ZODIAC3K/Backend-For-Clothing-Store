@@ -19,7 +19,7 @@ const errorHandler = (err, req, res, next) => {
   if ( statusCode === 500 && DEBUG_MODE )
     console.log(err); 
 
-  res.status(statusCode).json(data);
+  return res.status(statusCode).json(data);
 };
 
 module.exports = errorHandler;

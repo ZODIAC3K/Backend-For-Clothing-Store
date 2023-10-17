@@ -94,11 +94,21 @@ function checkUserRole(req, res, next) {
 	next();
 }
 
+function checkAdminRole(req, res, next) {
+	if (req.__auth.role !== "admin") {
+		next(CustomErrorHandler.unAuthorized("Not a 'Admin'! "));
+		return;
+	}
+
+	next();
+}
+
 const authMiddleware = {
 	apiKey: apiKeyAuth,
 	jwtAuth: jwtVerification,
 	emailStatus: emailStatusVerification,
 	userCheck: checkUserRole,
+	adminCheck: checkAdminRole,
 };
 
 module.exports = authMiddleware;

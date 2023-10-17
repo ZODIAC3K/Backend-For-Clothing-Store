@@ -2,10 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const { JwtService, CustomErrorHandler } = require("../services");
-const { User } = require("../models");
+const { UserDetail } = require("../models");
 const { APP_URL, APP_PORT, F_APP_URL, API_KEY } = require("../config");
 const { sendEmail } = require("../services");
-const {Token} = require("../models");
+const { Token } = require("../models");
 
 // ================= Email Verification Link Sent ================
 router.post("/send-verification-link/:id/", async (req, res) => {
@@ -15,7 +15,7 @@ router.post("/send-verification-link/:id/", async (req, res) => {
       return res.status(400).json({ message: "Invalid ID format" });
     }
 
-    const user = await User.findOne({ _id: req.params.id });
+    const user = await UserDetail.findOne({ _id: req.params.id });
 
     if (user) {
       if (user.email_verification === false) {
@@ -50,7 +50,7 @@ router.all("/send-verification-link/:id/", () => {
 // ================= Email Verification Processing =================
 router.get("/:id/verify/:token/", async (req, res) => {
   try {
-    const user = await User.findOne({ _id: req.params.id });
+    const user = await UserDetail.findOne({ _id: req.params.id });
     if (!user)
       return res.status(400).send({ message: "Invalid link -- user issue" });
 
@@ -60,10 +60,11 @@ router.get("/:id/verify/:token/", async (req, res) => {
     });
     if (!token)
       return res.status(400).send({ message: "Invalid link -- token issue" });
-    await User.updateOne({ _id: user._id }, { email_verification: true });
+    await UserDetail.updateOne({ _id: user._id }, { email_verification: true });
     await token.remove();
     res.redirect(302, `${F_APP_URL}`);
   } catch (error) {
+    console.log(error);
     res.status(400).send({ message: "Invalid link -- internal server issue" });
   }
 });
