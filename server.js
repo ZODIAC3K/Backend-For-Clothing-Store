@@ -52,3 +52,5 @@ process.on("SIGINT", () => {
 	conn.closeConnection();
 	process.exit(0);
 });
+
+module.exports = app;

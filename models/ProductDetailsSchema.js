@@ -25,11 +25,11 @@ const productDetailsSchema = new mongoose.Schema({
 
 
 const Product = mongoose.model('Product', productDetailsSchema);
-const StockDetail = mongoose.model('StockDetail', stockDetailSchema)
+const stockDetail = mongoose.model('StockDetail', stockDetailSchema)
 
 module.exports = { 
   Product,
-  StockDetail,
+  stockDetail,
   productDetailsSchema,
   stockDetailSchema
 };

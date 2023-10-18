@@ -38,6 +38,7 @@ async function registerUser(req, res, next) {
 		};
 
 		const user = new UserDetail(userData);
+		console.log(user._id);
 		user.save()
 			.then(async (savedUser) => {
 				await user.populate('profile_picture');
@@ -68,7 +69,7 @@ async function registerUser(req, res, next) {
 					fname: savedUser.fname,
 					lname: savedUser.lname,
 					mobile: savedUser.mobile,
-					profile_picture: user.profile_picture != null? {data:user.profile_picture.data,content_type:user.profile_picture.content_type} : null,
+					profile_picture: user.profile_picture != null ? {data:user.profile_picture.data,content_type:user.profile_picture.content_type} : null,
 					created_at: savedUser.created_at,
 					savedAddress: savedUser.savedAddress,
 					email_verification: savedUser.email_verification,

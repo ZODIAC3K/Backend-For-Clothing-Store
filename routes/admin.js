@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router();
-const { adminController, brandController, couponController, categoryController } = require("../controllers");
+const { adminController, brandController, couponController, categoryController, productController } = require("../controllers");
 const { CustomErrorHandler, upload } = require('../services');
 const { auth } = require('../middlewares');
-const { route } = require('./admin');
 
 router.post('/login',adminController.loginAdmin);
 router.use( auth.jwtAuth ) 
@@ -29,10 +28,10 @@ router.post('/category', categoryController.createCategory);
 router.patch('/category/:id', categoryController.updateCategory);
 router.delete('/category/:id', categoryController.deleteCategory);
 
-// // product create, update,delete // ------------------->>>>>>>> WORKING ON IT
-// router.post('/product', upload.single('productImage'), productController.createProduct);
-// router.patch('/product/:id', upload.single('productImage'), productController.updateProduct);
-// router.delete('/product/:id', productController.deleteProduct);
+// product create, update,delete // ------------------->>>>>>>> WORKING ON IT
+router.post('/product', upload.array('images', 5), productController.createProduct);
+router.patch('/product/:id', upload.array('images', 5), productController.updateProduct);
+router.delete('/product/:id', productController.deleteProduct);
 
 
 
