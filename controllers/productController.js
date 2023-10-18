@@ -144,9 +144,9 @@ function filterCategoryProducts(req, res, next) {
 }
 
 
-
 module.exports = {
 	fetchProducts,
 	filterProducts,
 	productById,
+	filterCategoryProducts,
 };
