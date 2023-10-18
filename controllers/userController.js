@@ -2,7 +2,6 @@ const { SALT } = require("../config");
 const { UserDetail, userDetailSchema } = require("../models");
 const {
 	CustomErrorHandler,
-	JwtService,
 	populateAllAttributes,
 } = require("../services");
 const { updateImage, deleteImage, insertImage } = require("./imageController");
@@ -66,10 +65,14 @@ async function updateUser(req, res, next) {
 				_id: req.__auth.id,
 			},
 			{
-				$set: req.body,
+				$set: {
+                    ...req.body,
+                    modified_at: Date.now()
+                },
 			},
 			{
 				new: true,
+                runValidators: true
 			}
 		)
 			.then(async (user) => {

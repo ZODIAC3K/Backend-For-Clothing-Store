@@ -149,5 +149,4 @@ module.exports = {
 	fetchProducts,
 	filterProducts,
 	productById,
-	filterCategoryProducts,
 };
