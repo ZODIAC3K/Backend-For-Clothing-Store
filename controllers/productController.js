@@ -12,7 +12,6 @@ const { insertMultipleImages } = require("./imageController");
 async function fetchProducts(req, res, next) {
 	try {
 		var { options } = req.body;
-
 		options = options ? options : {};
 		options.sortby = options.sortby ? options.sortby : { rating: -1 }; // If not sorting option provided sort by descending rating
 		options.limit = options.limit ? parseInt(options.limit) : 10; // If no limit specified then take limit as 10.
