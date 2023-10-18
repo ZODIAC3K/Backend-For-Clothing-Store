@@ -119,33 +119,8 @@ function productById(req, res, next) {
 	}
 }
 
-// GET product by category and custom search.
-function filterCategoryProducts(req, res, next) {
-	const { categories, brands, minRating, maxRating } = req.query;
-
-	const filter = {
-		rating: {
-			$lte: maxRating ? parseFloat(maxRating) : 5,
-			$gte: minRating ? parseFloat(minRating) : 0,
-		},
-	};
-
-	if (categories) {
-		filter.categories = {
-			$in: categories,
-		};
-	}
-
-	if (brands) {
-		filter.brand = {
-			$in: brands,
-		};
-	}
-}
-
 module.exports = {
 	fetchProducts,
 	filterProducts,
 	productById,
-	filterCategoryProducts,
 };
