@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router();
-const { adminController, brandController, couponController, categoryController, productController } = require("../controllers");
+const { adminController, brandController, couponController, categoryController, productController, bannerController } = require("../controllers");
 const { CustomErrorHandler, upload } = require('../services');
 const { auth } = require('../middlewares');
 
 router.post('/login',adminController.loginAdmin);
+
 router.use( auth.jwtAuth ) 
 router.use( auth.adminCheck )
-
 
 // brand create, update, delete
 router.get('/brand', brandController.getBrand);
@@ -33,7 +33,9 @@ router.post('/product', upload.array('images', 5), productController.createProdu
 router.patch('/product/:id', upload.array('images', 5), productController.updateProduct);
 router.delete('/product/:id', productController.deleteProduct);
 
-
-
+// banner create, update, delete 
+router.post('/banner', bannerController.createBanner);
+router.patch('/banner/:id', bannerController.updateBanner);
+router.delete('/banner/:id', bannerController.bannerDelete)
 
 module.exports = router;
