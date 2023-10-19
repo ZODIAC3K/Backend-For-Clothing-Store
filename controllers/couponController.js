@@ -36,7 +36,7 @@ exports.updateCoupon = async (req, res, next) => {
             },
             { new: true }
         );
-        if (!coupon) {
+        if (!updatedCoupon) {
             return res.status(404).json({ status: "fail", message: 'Coupon not found' });
         }
         res.status(200).json({ status: 'success',

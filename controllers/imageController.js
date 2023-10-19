@@ -16,7 +16,7 @@ async function insertImage(image) {
 }
 
 async function insertMultipleImages(images) {
-	const imageIds = [];
+	const imageDetails = [];
 
 	// Loop through the uploaded files and save each one
 	for (const file of images) {
@@ -29,10 +29,10 @@ async function insertMultipleImages(images) {
 
 		const savedImage = await imageDocument.save();
 		fs.unlinkSync(file.path);
-		imageIds.push(savedImage._id);
+		imageDetails.push({ id: savedImage._id, name: file.originalname });
 	}
 
-	return imageIds;
+	return imageDetails;
 }
 
 async function updateImage(id, image) {

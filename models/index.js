@@ -1,6 +1,6 @@
 const {
 	Product,
-	StockDetail,
+	stockDetail,
 	productDetailsSchema,
 	stockDetailSchema,
 } = require("./ProductDetailsSchema");
@@ -23,7 +23,7 @@ const { Transaction, transactionSchema } = require("./TransactionSchema");
 
 module.exports = {
 	Product,
-	StockDetail,
+	stockDetail,
 	BrandDetails,
 	CategoryDetails,
 	ImageDetails,
