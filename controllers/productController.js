@@ -161,8 +161,8 @@ async function createProduct(req, res, next) {
 				// console.log(imageArray);
 				const newStockDetail = new stockDetail({
 					product_id: product._id,
-					color: color,
-					size: size,
+					color: color.toUpperCase(),
+					size: size.toUpperCase() ,
 					amount: amount,
 					quantity: quantity,
 					image: imageArray,
