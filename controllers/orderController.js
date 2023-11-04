@@ -1,6 +1,6 @@
 // Import any necessary models or modules
 const e = require('express');
-const { OrderDetails, Address } = require('../models');
+const { OrderDetails, Address, stockDetail, CouponDetails, OfferDetails } = require('../models');
 
 
   // Function to get all orders
@@ -20,7 +20,7 @@ const { OrderDetails, Address } = require('../models');
         user_id,
         req_type,
         status,
-        product_ordered,
+        product_ordered, // array of product id's
         color,
         size_ordered,
         quantity_ordered,
@@ -45,6 +45,36 @@ const { OrderDetails, Address } = require('../models');
             address = "Not Provided";
             res.status(400).json({ message: "Please add an address to your account" });
         }
+        // traverse through the product_ordered array and check if the product is in stock
+        // if not in stock then return error message
+        // if in stock then update the stock of the product
+        // if the product is in stock then create the order
+
+        product_ordered = product_ordered.split(",");
+        coupon_used = coupon_used.split(",");
+        offer_used = offer_used.split(",");
+        total_amount = total_amount.split(",");
+
+
+        product_ordered.forEach((idx,product_id) => {
+            stockDetail.findById(product_id , size_ordered[idx] , color[idx]).then((stock_details) => {
+                if(stock_details){
+                    if(stock_details.quantity < quantity_ordered[idx]){
+                        res.status(400).json({ message: "Product is out of stock" });
+                    }      
+                };
+                OfferDetails.findById(coupon_used[idx]).then((offer_used) => {
+                    if(offer_used){
+                        const product_ordered_amount = offer_used.discount/100 * stock_details.amount; 
+                    }
+                });
+            });
+        });
+        
+
+
+
+
 
         const order = new OrderDetails({
             user_id: user_id,
