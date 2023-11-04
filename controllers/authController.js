@@ -38,7 +38,6 @@ async function registerUser(req, res, next) {
 		};
 
 		const user = new UserDetail(userData);
-		console.log(user._id);
 		user.save()
 			.then(async (savedUser) => {
 				await user.populate('profile_picture');

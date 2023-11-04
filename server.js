@@ -3,7 +3,7 @@ const { DatabaseConnection } = require("./services");
 const { APP_PORT } = require("./config");
 // This auth contains middlewares that check if the user that is requested has valid credentials or not
 const { auth, errorHandler } = require("./middlewares");
-const { authRouter, emailVerificationRouter, userRouter, adminRouter, productRouter } = require("./routes");
+const { authRouter, emailVerificationRouter, userRouter, adminRouter, productRouter, orderRouter } = require("./routes");
 const cors = require("cors");
 const app = express();
 
@@ -32,6 +32,7 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/order', orderRouter);
 app.post("/api/v1/test", auth.jwtAuth, (req, res) => {
 	res.send("hi!");
 });
