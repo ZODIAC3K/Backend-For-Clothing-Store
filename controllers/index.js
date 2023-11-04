@@ -6,6 +6,7 @@ const productController = require('./productController');
 const brandController = require('./brandController');
 const couponController = require('./couponController');
 const categoryController = require('./categoryController');
+const orderController = require('./orderController');
 const bannerController = require('./bannerController')
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
     brandController,
     couponController,
     categoryController,
+    orderController,
     bannerController
 }
