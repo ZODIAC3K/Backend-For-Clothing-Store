@@ -6,7 +6,6 @@ const {
 	CouponDetails,
 	OfferDetails,
 } = require("../models");
-const { CustomErrorHandler } = require("../services");
 
 // Function to get all orders
 async function getAllOrders(req, res, next) {
