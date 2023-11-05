@@ -4,6 +4,7 @@ const CustomErrorHandler = require('./CustomErrorHandler');
 const sendEmail = require('./emailVerification');
 const populateAllAttributes = require('./populateDocs');
 const DatabaseConnection = require('./dbConnection');
+const analyticFilters = require('./analyticsFilters');
 
 
 module.exports = {
@@ -12,5 +13,6 @@ module.exports = {
     CustomErrorHandler,
     DatabaseConnection,
     sendEmail,
-    populateAllAttributes
+    populateAllAttributes,
+    analyticFilters,
 }

@@ -41,7 +41,15 @@ exports.getBrand = async (req, res) => {
 // Update a brand by ID
 exports.updateBrand = async (req, res) => {
     try {
-        const updatedBrand = await BrandDetails.findByIdAndUpdate(req.params.id, req.body, {
+
+        const id = req.params.id;
+
+        if (req.file) {
+			const brand = await BrandDetails.findById(id);
+			req.body.image = await updateImage(brand.image, req.file);
+		}
+
+        const updatedBrand = await BrandDetails.findByIdAndUpdate( id, req.body, {
             new: true,
             runValidators: true
         });

@@ -29,9 +29,34 @@ function getBanners(req, res, next) {
 	}
 }
 
+function getBannerById (req, res, next) {
+	try {
+		const { id } = req.params;
+
+		BannerDetails.findById(id)
+			.then((banner) => {
+				populateAllAttributes(banner, bannerSchema).then(banner=>{
+					res.status(200).json({
+						status: 'success',
+						data: {
+							banner,
+						}
+					})
+				});
+			})
+			.catch((error) => {
+				next(error);
+				return;
+			});
+	} catch (error) {
+		next(error);
+		return;
+	}
+}
+
 function getBannerByType(req, res, next) {
 	try {
-		const { type } = req.params.type;
+		const { type } = req.params;
 
 		BannerDetails.find({ type })
 			.then(async (banners) => {
@@ -135,6 +160,7 @@ function bannerDelete(req, res, next) {
 }
 
 module.exports = {
+	getBannerById,
 	getBannerByType,
 	getBanners,
 	createBanner,

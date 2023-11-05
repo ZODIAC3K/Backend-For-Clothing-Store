@@ -6,7 +6,7 @@ const {
 	ImageDetails,
 } = require("../models");
 const { populateAllAttributes } = require("../services");
-const { insertMultipleImages } = require("./imageController");
+const { insertMultipleImages, updateImage } = require("./imageController");
 
 // GET all products sort by highest rating.
 async function fetchProducts(req, res, next) {
@@ -203,10 +203,11 @@ async function updateProduct(req, res, next) {
 		size,
 		amount,
 		quantity,
+		image_id // Image ids as stored in the db
 	} = req.body;
 	const brandArray = brand.split(",");
 	const categoriesArray = categories.split(",");
-
+	const img_idx = image_id.split(',')
 	try {
 		const product = await Product.findById(id);
 		if (!product) {
@@ -228,9 +229,12 @@ async function updateProduct(req, res, next) {
 			{ upsert: true, new: true }
 		);
 
-		req.images =
-			req.files != null ? await insertMultipleImages(req.files) : null; // array of image ids.
-		stockDetails.image = req.images;
+		if (img_idx && req.files) {
+			req.files.forEach(async (file, idx)=>{
+				await updateImage(img_idx[idx], file);
+			})
+		}
+		
 		await stockDetails.save();
 
 		await product.save();

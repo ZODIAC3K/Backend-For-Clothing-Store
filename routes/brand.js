@@ -1,12 +1,9 @@
 const express = require('express');
-const { analyticsController } = require('../controllers');
+const { brandController } = require('../controllers');
 const router = express.Router();
 
-// GET all numbers of entries
-router.get('/', analyticsController.getAnalysis);
-
-// GET filtered numbers of a field
-// router.get('/:field');
+// GET all brand
+router.get('/', brandController.getBrand);
 
 // Classify all other requests to this route as bad requests
 router.all('/',(req,res, next)=>{next(CustomErrorHandler.badRequest()); return;})

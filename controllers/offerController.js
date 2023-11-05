@@ -192,7 +192,7 @@ function updateOffer(req, res, next) {
 
 function deleteOffer(req, res, next) {
 	try {
-		const { id } = req.params.id;
+		const { id } = req.params;
 
 		OfferDetails.findByIdAndDelete(id)
 			.then(() => {

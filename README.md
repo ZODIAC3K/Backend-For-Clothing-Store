@@ -144,3 +144,91 @@ Requests need to be authenticated such that any third party cannot request resou
     Make sure to use **ERROR HANDLING** when using this controller as it **directly throws error** without passing it to the next middleware.
 
     **NOTE:** Size checking has not been added yet
+
+## Get Analysis Data
+
+Endpoint to fetch various analytics data related to products, orders, and returns.
+
+- ### Endpoint
+
+    `GET /api/v1/analysis/`
+
+- ### Response Data
+
+    The response data is a JSON object containing the following key-value pairs:
+
+    - `totalProducts` (Number): The total number of products.
+
+    - `highestSoldProducts` (Array): An array of products with their total sold quantities.
+
+    - `highestRatedProduct` (Object): The product with the highest average rating.
+
+    - `mostSoldCategory` (Object): The category with the most products sold.
+
+    - `mostSoldBrand` (Object): The brand with the most products sold.
+
+    - `totalOrders` (Number): The total number of orders.
+
+    - `ordersPending` (Array): An array of orders with "Pending" status.
+
+    - `ordersAccepted` (Array): An array of orders with "Accepted" status.
+
+    - `ordersRejected` (Array): An array of orders with "Rejected" status.
+
+    - `totalReturnedOrders` (Number): The total number of returned orders.
+
+    - `totalAmountGainedOnOrders` (Number): The total amount gained on orders.
+
+    - `totalAmountSpentOnReturns` (Number): The total amount spent on returns.
+
+- ### Example
+
+    ```json
+    {
+    "totalProducts": 1000,
+    "highestSoldProducts": [
+        {
+        "product_id": "123",
+        "totalSold": 500
+        },
+        // Other products...
+    ],
+    "highestRatedProduct": {
+        "product_id": "456",
+        "avgRating": 4.7
+    },
+    "mostSoldCategory": {
+        "category_id": "789",
+        "totalSold": 300
+    },
+    "mostSoldBrand": {
+        "brand_id": "abc",
+        "totalSold": 150
+    },
+    "totalOrders": 500,
+    "ordersPending": [
+        {
+        "order_id": "111",
+        "status": "Pending"
+        },
+        // Other "Pending" orders...
+    ],
+    "ordersAccepted": [
+        {
+        "order_id": "222",
+        "status": "Accepted"
+        },
+        // Other "Accepted" orders...
+    ],
+    "ordersRejected": [
+        {
+        "order_id": "333",
+        "status": "Rejected"
+        },
+        // Other "Rejected" orders...
+    ],
+    "totalReturnedOrders": 50,
+    "totalAmountGainedOnOrders": 10000.0,
+    "totalAmountSpentOnReturns": 500.0
+    }
+    ```

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const { adminController, brandController, couponController, categoryController, productController, bannerController } = require("../controllers");
+const { adminController, brandController, couponController, categoryController, productController, bannerController, offerController } = require("../controllers");
 const { CustomErrorHandler, upload } = require('../services');
 const { auth } = require('../middlewares');
 
@@ -10,7 +10,6 @@ router.use( auth.jwtAuth )
 router.use( auth.adminCheck )
 
 // brand create, update, delete
-router.get('/brand', brandController.getBrand);
 router.post('/brand', upload.single('image'), brandController.createBrand);
 router.patch('/brand/:id', upload.single('image'), brandController.updateBrand);
 router.delete('/brand/:id', brandController.deleteBrand);
@@ -23,7 +22,6 @@ router.delete('/coupon/:id', couponController.deleteCoupon);
 
 
 // catagory create, update, delete
-router.get('/category', categoryController.getCategory);
 router.post('/category', categoryController.createCategory);
 router.patch('/category/:id', categoryController.updateCategory);
 router.delete('/category/:id', categoryController.deleteCategory);
@@ -34,8 +32,14 @@ router.patch('/product/:id', upload.array('images', 5), productController.update
 router.delete('/product/:id', productController.deleteProduct);
 
 // banner create, update, delete 
-router.post('/banner', bannerController.createBanner);
-router.patch('/banner/:id', bannerController.updateBanner);
-router.delete('/banner/:id', bannerController.bannerDelete)
+router.post('/banner', upload.single('image'), bannerController.createBanner);
+router.patch('/banner/:id', upload.single('image'), bannerController.updateBanner);
+router.delete('/banner/:id', bannerController.bannerDelete);
+
+// offer create, update, delete
+router.post('/offer', offerController.createOffer);
+router.patch('/offer/:id', offerController.updateOffer);
+router.delete('/offer/:id', offerController.deleteOffer);
+router.delete('/offers', offerController.deleteOffers);
 
 module.exports = router;
