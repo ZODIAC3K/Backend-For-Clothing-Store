@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use( auth.jwtAuth )
 router.use( auth.userCheck)
-// UNDER DEVELOPMENT KINDLY SHUT THE FUCK UP!
+
 // Create Order
 router.post('/', orderController.createOrder)
 
