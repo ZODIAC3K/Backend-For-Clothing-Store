@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', analyticsController.getAnalysis);
 
 // GET filtered numbers of a field
-// router.get('/:field');
+router.get('/:filter');
 
 // Classify all other requests to this route as bad requests
 router.all('/',(req,res, next)=>{next(CustomErrorHandler.badRequest()); return;})

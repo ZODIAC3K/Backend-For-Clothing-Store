@@ -1,5 +1,73 @@
 const { ReturnDetails, Product, OrderDetails } = require("../models");
 
+const moment = require('moment');
+
+/**
+ * Get orders placed based on a time filter and return them as (x, y) coordinate arrays.
+ *
+ * This function retrieves order data within a specified time filter (day, week, month, or year) and formats
+ * it as an array of (x, y) coordinate objects, where 'x' represents the timestamp and 'y' represents the number
+ * of orders placed at that timestamp.
+ *
+ * @param {string} filter - The time filter (day, week, month, year).
+ *
+ * @returns {Array<Object>} An array of (x, y) coordinate objects with timestamps and order counts.
+ * 
+ * Example of the returned data:
+ * [
+ *   { x: 1668175200000, y: 10 }, // Example timestamp (x) and number of orders (y)
+ *   { x: 1668186000000, y: 15 },
+ *   { x: 1668196800000, y: 18 },
+ *   // ... more data points for the specified time filter
+ * ]
+ *
+ * @throws {Error} If there's an error during data retrieval or processing.
+ */
+async function getOrdersBasedOnTimeFilter(filter) {
+  // Define the time filter values in milliseconds.
+  const timeFilters = {
+    day: 24 * 60 * 60 * 1000,
+    week: 7 * 24 * 60 * 60 * 1000,
+    month: 30 * 24 * 60 * 60 * 1000,
+    year: 365 * 24 * 60 * 60 * 1000,
+  };
+
+  // Calculate the start timestamp based on the filter.
+  const startTime = Date.now() - timeFilters[filter];
+
+  try {
+    // Use MongoDB aggregation to group and count orders based on the timestamp.
+    const result = await OrderDetails.aggregate([
+      {
+        $match: {
+          created_at: { $gte: new Date(startTime) },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$created_at' },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+
+    // Format the result as (x, y) coordinate arrays.
+    const dataPoints = result.map((item) => ({
+      x: moment(item._id).valueOf(), // Convert date to timestamp.
+      y: item.count,
+    }));
+
+    return dataPoints;
+  } catch (error) {
+    // Handle any errors here.
+    console.error('An error occurred:', error);
+    return null;
+  }
+}
+
 /**
  * Get the total amount of money spent on returns by summing the 'total_amount' from related orders.
  * @returns {Promise<number>} The total amount spent on returns.
@@ -177,4 +245,5 @@ module.exports = {
 	ordersByReq: getOrdersByReqType,
 	totalAmountGained: getTotalAmountGainedOnOrders,
 	totalAmountSpent: getTotalAmountSpentOnReturns,
+	graphData: getOrdersBasedOnTimeFilter,
 };

@@ -232,3 +232,47 @@ Endpoint to fetch various analytics data related to products, orders, and return
     "totalAmountSpentOnReturns": 500.0
     }
     ```
+    
+# Get Analysis Data by Time Filter
+
+Endpoint to fetch analysis data based on a specific time filter (day, week, month, or year).
+
+## Endpoint
+
+`GET /api/v1/admin/analytics/:filter`
+
+### Parameters
+
+- `filter` (string): The time filter for data retrieval (e.g., "day", "week", "month", or "year").
+
+### Response Data
+
+The response data is an array of (x, y) coordinate objects representing the number of orders or relevant metric counts at various timestamps within the specified time filter.
+
+- `x` (number): Timestamp in milliseconds.
+- `y` (number): The corresponding metric count (e.g., number of orders).
+
+### Example
+
+```json
+[
+  { "x": 1668175200000, "y": 10 }, // Example timestamp (x) and metric count (y)
+  { "x": 1668186000000, "y": 15 },
+  { "x": 1668196800000, "y": 18 },
+  // ... more data points for the specified time filter
+]
+```
+
+### Date Parsing Function
+
+To parse the incoming timestamp and format it as a human-readable date, you can use the following JavaScript function:
+
+```javascript
+function formatTimestampToHumanReadable(timestamp) {
+  const formattedDate = new Date(timestamp).toLocaleString(); // Customize the format as needed
+  return formattedDate;
+}
+```
+You can call this function to format the ‘x’ values (timestamps) in the response data to human-readable dates if needed.
+
+This documentation provides information about the API endpoint, the input parameter, the structure of the response data, and a function to parse incoming timestamps into human-readable dates. It can be shared with the frontend team for reference.
