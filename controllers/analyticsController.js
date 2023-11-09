@@ -55,21 +55,19 @@ async function getAnalysis(req, res, next) {
 
 async function getAnalysisByTimeFilter(req, res, next) {
 	try {
-		
 		const filter = req.params.filter;
 
-    		// Ensure the filter is valid (day, week, month, or year).
-    		const validFilters = ['day', 'week', 'month', 'year'];
-    		if (!validFilters.includes(filter)) {
-      		return res.status(400).json({ error: 'Invalid time filter' });
-    		}
+		// Ensure the filter is valid (day, week, month, or year).
+		const validFilters = ["day", "week", "month", "year"];
+		if (!validFilters.includes(filter)) {
+			return res.status(400).json({ error: "Invalid time filter" });
+		}
 
-    		// Call the getOrdersBasedOnTimeFilter function to fetch and format analysis data.
-    		const dataPoints = await getOrdersBasedOnTimeFilter(filter);
+		// Call the getOrdersBasedOnTimeFilter function to fetch and format analysis data.
+		const dataPoints = await getOrdersBasedOnTimeFilter(filter);
 
-    		// Send the formatted analysis data as the response.
-    		res.status(200).json(dataPoints);
-		
+		// Send the formatted analysis data as the response.
+		res.status(200).json(dataPoints);
 	} catch (error) {
 		next(error);
 	}
@@ -77,5 +75,5 @@ async function getAnalysisByTimeFilter(req, res, next) {
 
 module.exports = {
 	getAnalysis,
-	getAnalysisByField,
+	getAnalysisByTimeFilter,
 };

@@ -1,11 +1,8 @@
 const { SALT } = require("../config");
 const { JwtService, CustomErrorHandler } = require("../services");
 const CryptoJS = require("crypto-js");
-const { populateAllAttributes} = require("../services");
+const { populateAllAttributes } = require("../services");
 const { Admin, adminSchema } = require("../models");
-
-
-
 
 // Log Admin in based on credentials ( email, password )
 async function loginAdmin(req, res, next) {
@@ -13,8 +10,7 @@ async function loginAdmin(req, res, next) {
 		const { email, password } = req.body;
 		Admin.findOne({
 			email: email,
-		})
-		.then(async (user) => {
+		}).then(async (user) => {
 			if (!user) {
 				next(CustomErrorHandler.notFound());
 				return;
@@ -43,7 +39,13 @@ async function loginAdmin(req, res, next) {
 				fname: user.fname,
 				lname: user.lname,
 				mobile: user.mobile,
-				profile_picture: user.profile_picture != null? {data:user.profile_picture.data,content_type:user.profile_picture.content_type} : null,
+				profile_picture:
+					user.profile_picture != null
+						? {
+								data: user.profile_picture.data,
+								content_type: user.profile_picture.content_type,
+						  }
+						: null,
 				created_at: user.created_at,
 			};
 
@@ -59,4 +61,4 @@ async function loginAdmin(req, res, next) {
 	}
 }
 
-module.exports = {loginAdmin};
+module.exports = { loginAdmin };
