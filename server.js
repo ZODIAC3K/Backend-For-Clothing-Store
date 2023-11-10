@@ -33,9 +33,6 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/order', orderRouter);
-app.post("/api/v1/test", auth.jwtAuth, (req, res) => {
-	res.send("hi!");
-});
 
 // ================ Error Handling middleware ================
 app.use(errorHandler);

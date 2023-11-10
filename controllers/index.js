@@ -10,6 +10,7 @@ const orderController = require('./orderController');
 const bannerController = require('./bannerController');
 const offerController = require('./offerController');
 const analyticsController = require('./analyticsController');
+const addressController = require('./addressController');
 
 module.exports = {
     authController,
@@ -23,5 +24,6 @@ module.exports = {
     orderController,
     bannerController,
     offerController,
-    analyticsController
+    analyticsController,
+    addressController,
 }

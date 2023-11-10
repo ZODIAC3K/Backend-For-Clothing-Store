@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router();
 const { adminController, brandController, couponController, categoryController, productController, bannerController, offerController } = require("../controllers");
-const { CustomErrorHandler, upload } = require('../services');
+const { upload } = require('../services');
 const { auth } = require('../middlewares');
+const analyticsRouter = require('./analytics')
 
 router.post('/login',adminController.loginAdmin);
 
@@ -41,5 +42,8 @@ router.post('/offer', offerController.createOffer);
 router.patch('/offer/:id', offerController.updateOffer);
 router.delete('/offer/:id', offerController.deleteOffer);
 router.delete('/offers', offerController.deleteOffers);
+
+// Analytics Routes
+router.use('/analytics', analyticsRouter)
 
 module.exports = router;
