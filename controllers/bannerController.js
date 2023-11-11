@@ -5,18 +5,23 @@ const { insertImage, updateImage } = require("./imageController");
 function getBanners(req, res, next) {
 	try {
 		BannerDetails.find()
+			.populate("image") // response too big may increase load time uncomment if needed
+			// .populate({
+			// 	path: "applicable_product",
+			// 	populate: [
+			// 		{ path: "category" },
+			// 		{
+			// 			path: "brand stock_details",
+			// 			populate: "image",
+			// 		},
+			// 	],
+			// })
 			.then((banners) => {
-				banners.map(async (banner) => {
-					banner = await populateAllAttributes(banner, bannerSchema);
-				});
-
-				Promise.all(banners).then((banners) => {
-					res.status(200).json({
-						status: "success",
-						data: {
-							banners,
-						},
-					});
+				res.status(200).json({
+					status: "success",
+					data: {
+						banners,
+					},
 				});
 			})
 			.catch((error) => {
@@ -29,19 +34,19 @@ function getBanners(req, res, next) {
 	}
 }
 
-function getBannerById (req, res, next) {
+function getBannerById(req, res, next) {
 	try {
 		const { id } = req.params;
 
 		BannerDetails.findById(id)
 			.then((banner) => {
-				populateAllAttributes(banner, bannerSchema).then(banner=>{
+				populateAllAttributes(banner, bannerSchema).then((banner) => {
 					res.status(200).json({
-						status: 'success',
+						status: "success",
 						data: {
 							banner,
-						}
-					})
+						},
+					});
 				});
 			})
 			.catch((error) => {
@@ -59,18 +64,23 @@ function getBannerByType(req, res, next) {
 		const { type } = req.params;
 
 		BannerDetails.find({ type })
+			.populate("image") // response too big may increase load time uncomment if needed
+			// .populate({
+			// 	path: "applicable_product",
+			// 	populate: [
+			// 		{ path: "category" },
+			// 		{
+			// 			path: "brand stock_details",
+			// 			populate: "image",
+			// 		},
+			// 	],
+			// })
 			.then(async (banners) => {
-				banners.map(async (banner) => {
-					banner = await populateAllAttributes(banner, bannerSchema);
-				});
-
-				Promise.all(banners).then((banners) => {
-					res.status(200).json({
-						status: "success",
-						data: {
-							banners,
-						},
-					});
+				res.status(200).json({
+					status: "success",
+					data: {
+						banners,
+					},
 				});
 			})
 			.catch((error) => {
@@ -88,6 +98,13 @@ async function createBanner(req, res, next) {
 		if (!req.file) {
 			next(CustomErrorHandler.badRequest("Banner image not provided."));
 		}
+
+		if (req.body.applicable_product) {
+			req.body.applicable_product = JSON.parse(
+				req.body.applicable_product
+			);
+		}
+
 		req.body.image = await insertImage(req.file);
 		const bannerDetails = req.body;
 
@@ -117,6 +134,12 @@ async function updateBanner(req, res, next) {
 		if (req.file) {
 			const banner = await BannerDetails.findById(bannerId);
 			req.body.image = await updateImage(banner.image, req.file);
+		}
+
+		if (req.body.applicable_product) {
+			req.body.applicable_product = JSON.parse(
+				req.body.applicable_product
+			);
 		}
 
 		const bannerDetails = req.body;

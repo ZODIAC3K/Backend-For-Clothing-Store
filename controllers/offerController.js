@@ -4,28 +4,12 @@ const { populateAllAttributes, CustomErrorHandler } = require("../services");
 function getOffers(req, res, next) {
 	try {
 		OfferDetails.find().then((offers) => {
-			offers
-				.map(async (offer) => {
-					offer = await populateAllAttributes(offer, offerSchema);
-				})
-				.catch((error) => {
-					next(error);
-					return;
-				});
-
-			Promise.all(offers)
-				.then((offers) => {
-					res.status(200).json({
-						status: "sucessful",
-						data: {
-							offers,
-						},
-					});
-				})
-				.catch((error) => {
-					next(error);
-					return;
-				});
+			res.status(200).json({
+				status: "sucessful",
+				data: {
+					offers,
+				},
+			});
 		});
 	} catch (error) {
 		next(error);
@@ -68,30 +52,16 @@ function getOffersByFilter(req, res, next) {
 			};
 		}
 
-		OfferDetails.find(query).then((offers) => {
-			offers
-				.map(async (offer) => {
-					offer = await populateAllAttributes(offer, offerSchema);
-				})
-				.catch((error) => {
-					next(error);
-					return;
+		OfferDetails.find(query)
+			.populate("applicable_on")
+			.then((offers) => {
+				res.status(200).json({
+					status: "sucessful",
+					data: {
+						offers,
+					},
 				});
-
-			Promise.all(offers)
-				.then((offers) => {
-					res.status(200).json({
-						status: "sucessful",
-						data: {
-							offers,
-						},
-					});
-				})
-				.catch((error) => {
-					next(error);
-					return;
-				});
-		});
+			});
 	} catch (error) {
 		next(error);
 		return;

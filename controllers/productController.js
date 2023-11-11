@@ -20,22 +20,22 @@ async function fetchProducts(req, res, next) {
 			: 0; // If no skip / page specified take 0 (start from the first document).
 
 		Product.find()
+			.populate("category")
+			.populate({
+				path: "brand",
+				populate: "image",
+			})
+			.populate({
+				path: "stock_details",
+				populate: "image",
+			})
 			.sort(options.sortby)
 			.skip(options.skip)
 			.limit(options.limit)
 			.then(async (products) => {
-				products.map(async (product) => {
-					product = await populateAllAttributes(
-						product,
-						productDetailsSchema
-					);
-				});
-
-				Promise.all(products).then((products) => {
-					res.status(200).json({
-						message: "success",
-						products,
-					});
+				res.status(200).json({
+					message: "success",
+					products,
 				});
 			})
 			.catch((error) => {
@@ -73,19 +73,19 @@ function filterProducts(req, res, next) {
 		}
 
 		Product.find(filter)
+			.populate("category")
+			.populate({
+				path: "brand",
+				populate: "image",
+			})
+			.populate({
+				path: "stock_details",
+				populate: "image",
+			})
 			.then(async (products) => {
-				products.map(async (product) => {
-					product = await populateAllAttributes(
-						product,
-						productDetailsSchema
-					);
-				});
-
-				Promise.all(products).then((products) => {
-					res.status(200).json({
-						message: "success",
-						products,
-					});
+				res.status(200).json({
+					message: "success",
+					products,
 				});
 			})
 			.catch((error) => {
@@ -125,7 +125,6 @@ function productById(req, res, next) {
 	}
 }
 
-
 // CREATE a new product with multiple stock details.
 async function createProduct(req, res, next) {
 	// ----> work in progress
@@ -162,7 +161,7 @@ async function createProduct(req, res, next) {
 				const newStockDetail = new stockDetail({
 					product_id: product._id,
 					color: color.toUpperCase(),
-					size: size.toUpperCase() ,
+					size: size.toUpperCase(),
 					amount: amount,
 					quantity: quantity,
 					image: imageArray,
@@ -203,11 +202,11 @@ async function updateProduct(req, res, next) {
 		size,
 		amount,
 		quantity,
-		image_id // Image ids as stored in the db
+		image_id, // Image ids as stored in the db
 	} = req.body;
 	const brandArray = brand.split(",");
 	const categoriesArray = categories.split(",");
-	const img_idx = image_id.split(',')
+	const img_idx = image_id.split(",");
 	try {
 		const product = await Product.findById(id);
 		if (!product) {
@@ -230,11 +229,11 @@ async function updateProduct(req, res, next) {
 		);
 
 		if (img_idx && req.files) {
-			req.files.forEach(async (file, idx)=>{
+			req.files.forEach(async (file, idx) => {
 				await updateImage(img_idx[idx], file);
-			})
+			});
 		}
-		
+
 		await stockDetails.save();
 
 		await product.save();
@@ -266,7 +265,8 @@ async function deleteProduct(req, res, next) {
 
 		const stock = await stockDetail.find({ product_id: id });
 
-		stock.map(async (stock) => { // working as a for loop
+		stock.map(async (stock) => {
+			// working as a for loop
 			const imageIds = stock.image;
 			if (imageIds && imageIds.length > 0) {
 				await ImageDetails.deleteMany({ _id: { $in: imageIds } });
