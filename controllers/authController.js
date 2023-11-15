@@ -100,17 +100,17 @@ async function loginUser(req, res, next) {
 		})
 		.then(async (user) => {
 			if (!user) {
-				next(CustomErrorHandler.notFound());
+				next(CustomErrorHandler.notFound("Email Not Found!"));
 				return;
 			}
-
-			const encryptedPass = CryptoJS.AES.encrypt(
-				password,
+			
+			const decreptedPass = CryptoJS.AES.decrypt(
+				user.password,
 				SALT
-			).toString();
+			).toString(CryptoJS.enc.Utf8);
 
-			if (!user.password === encryptedPass) {
-				next(CustomErrorHandler.wrongCredentials());
+			if (password != decreptedPass) {
+				next(CustomErrorHandler.notFound("Passowrd Missmatch!"));
 				return;
 			}
 
