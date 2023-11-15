@@ -110,7 +110,7 @@ async function loginUser(req, res, next) {
 			).toString(CryptoJS.enc.Utf8);
 
 			if (password != decreptedPass) {
-				next(CustomErrorHandler.notFound("Passowrd Missmatch!"));
+				next(CustomErrorHandler.wrongCredentials("Passowrd Missmatch!"));
 				return;
 			}
 
