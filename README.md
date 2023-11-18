@@ -1,5 +1,20 @@
 # Backend-For-Clothing-Store
 
+
+## Must Run First
+```
+    git config --global core.autocrlf true
+```
+- Converts line endings to the native format of the operating system on checkout.
+- Converts them back to the standard format on commit.
+- Useful for cross-platform collaboration to maintain consistent line endings.
+```
+    git config --global core.autocrlf input
+```
+- Converts line endings to LF (Unix format) on checkout.
+- Leaves line endings unchanged on commit.
+- Useful when working locally with LF line endings but preserving the original line endings in the repository.
+
 ## Run Server
 Use the prewritten scripts **'start'** or **'dev'** to run the server.
 
